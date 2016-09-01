@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using VisualSVN_Agent.utils;
+using Newtonsoft.Json;
 
 namespace VisualSVN_Agent
 {
@@ -26,12 +21,30 @@ namespace VisualSVN_Agent
 
         protected override void OnStart(string[] args)
         {
+            // 基本变量写入配置
+            ProgramSetting.ProgramInPath = Environment.CurrentDirectory;
+            ProgramSetting.ConfigFilePath = FileHelper.Combine(Environment.CurrentDirectory, "config.json");
+
+            // 读取配置文件
+            if (File.Exists(ProgramSetting.ConfigFilePath))
+            {
+                string response=File.ReadAllText(ProgramSetting.ConfigFilePath);
+                var responseJson=JsonConvert.DeserializeObject<RootObject>(response);
+                ProgramSetting.Repositoriespath = responseJson.Repositories.path;
+                MainFunction.MainRunFunction();
+            }
+            else
+            {
+                LogHelper.WriteLog(" 未找到配置文件 config.json", LogHelper.Log4NetLevel.Fatal);
+            }
             
+
            
         }
 
         protected override void OnStop()
         {
+            
         }
     }
 }

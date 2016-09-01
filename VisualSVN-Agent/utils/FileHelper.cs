@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VisualSVN_Agent.utils
 {
-    class FileHelper
+    static class FileHelper
     {
         /// <summary>
         /// 读取文件
@@ -44,6 +44,21 @@ namespace VisualSVN_Agent.utils
                 }
             }
             return lines;
+        }
+
+        /// <summary>
+        /// 一次性读取文件所有内容
+        /// </summary>字典
+        /// <param name="filePath">文件路径</param>
+        /// <returns>返回文件所有内容 MemoryStream </returns>
+        public static MemoryStream ReadFileForAll(string filePath)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            using (Stream txt = File.OpenRead(filePath))
+            {
+                txt.CopyTo(memoryStream);
+            }
+            return memoryStream;
         }
 
 
@@ -87,6 +102,31 @@ namespace VisualSVN_Agent.utils
             {
                 LogHelper.WriteLog(Convert.ToString(ex),LogHelper.Log4NetLevel.Error);
             }
+        }
+
+        /// <summary>
+        /// 搜索路径下特定名称的文件并返回
+        /// </summary>
+        /// <param name="folderPath">文件夹路径</param>
+        /// <param name="fileName">文件名</param>
+        /// <param name="se">搜索条件</param>
+        /// <returns>string类型的路径数组</returns>
+        public static string[] GetFileList(string folderPath,string fileName,SearchOption se)
+        {
+            string[] files = Directory.GetFiles(folderPath, fileName, se);
+
+            return files;
+        }
+
+        /// <summary>
+        /// 合并拼接路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="append"></param>
+        /// <returns></returns>
+        public static string Combine(this string path, string append)
+        {
+            return Path.Combine(path, append);
         }
     }
 }
