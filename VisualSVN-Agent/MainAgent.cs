@@ -7,18 +7,27 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using VisualSVN_Agent.utils;
 
 namespace VisualSVN_Agent
 {
-    public partial class Service1 : ServiceBase
+    public partial class MainAgent : ServiceBase
     {
-        public Service1()
+        public MainAgent()
         {
             InitializeComponent();
         }
 
+        public void OnDebug()
+        {
+            OnStart(null);
+        }
+
+
         protected override void OnStart(string[] args)
         {
+            
+           
         }
 
         protected override void OnStop()
