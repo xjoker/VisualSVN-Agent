@@ -1,16 +1,19 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using VisualSVN_Agent.utils;
 
 namespace VisualSVN_Agent.VirtualSVNHelper
 {
     public static class SVNHelper
     {
+        /// <summary>
+        /// 获取SVN所有的用户组以及用户
+        /// </summary>
+        /// <returns></returns>
         public static Dictionary<string, List<string>> GetAllUserAndGroup()
         {
             Dictionary<string, List<string>> GroupAndUsers = new Dictionary<string, List<string>>();
@@ -64,6 +67,77 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                 LogHelper.WriteLog("未找到 groups.conf 文件", LogHelper.Log4NetLevel.Error);
             }
             return null;
+        }
+
+
+        /// <summary>
+        /// 将htpasswd内的用户名密码读入
+        /// </summary>
+        public static void htpasswdRead()
+        {
+            string SVNGroupConfigPath = FileHelper.Combine(ProgramSetting.Repositoriespath, "htpasswd");
+
+            if (File.Exists(SVNGroupConfigPath))
+            {
+                // 按行读取文件，确认文件至少药有一行
+                var passwdFile = FileHelper.ReadFileForLines(SVNGroupConfigPath);
+                if (passwdFile.Count>1)
+                {
+                    foreach (var item in passwdFile)
+                    {
+                        // 按行读取文件，确认是否有数据
+                        string[] line = item.Split(':');
+                        if (line.Length==2)
+                        {
+                            // 切分密码字符串
+                            string[] pw = line[1].Split('$');
+                            // 构建密码字符串类型
+                            if (pw.Length==3)
+                            {
+                                htpasswdPassword hp = new htpasswdPassword();
+                                hp.cryptMode = pw[0];
+                                hp.salt = pw[1];
+                                hp.passwordHash = pw[2];
+
+                                
+                                htpasswdUserAndPassword.UsersTable.Add(line[0], hp);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    LogHelper.WriteLog("htpasswd 文件为空", LogHelper.Log4NetLevel.Error);
+                }
+            }
+            else
+            {
+                LogHelper.WriteLog("htpasswd 文件不存在", LogHelper.Log4NetLevel.Error);
+            }
+        }
+
+
+
+        /// <summary>
+        /// 密码校验
+        /// </summary>
+        /// <param name="username">SVN内存在的用户名</param>
+        /// <param name="password">密码</param>
+        /// <returns></returns>
+        public static bool passwordCheck(string username,string password)
+        {
+            if (htpasswdUserAndPassword.UsersTable.ContainsKey(username))
+            {
+                var pd = htpasswdUserAndPassword.UsersTable[username];
+                var result = UnixMd5CryptTool.crypt(password, pd.salt, pd.cryptMode);
+                if (result==("$"+pd.cryptMode+"$"+pd.salt+"$"+pd.passwordHash))
+                {
+                    return true;
+                }
+            }
+
+
+            return false;
         }
     }
 }

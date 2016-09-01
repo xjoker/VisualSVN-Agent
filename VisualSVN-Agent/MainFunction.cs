@@ -15,7 +15,8 @@ namespace VisualSVN_Agent
             
             string[] file = FileHelper.GetFileList(ProgramSetting.Repositoriespath, "VisualSVN-SvnAuthz.ini", SearchOption.AllDirectories);
             var b=VirtualSVNHelper.SVNHelper.GetAllUserAndGroup();
-            
+            var c = VirtualSVNHelper.SVNHelper.htpasswdCheck("11","dd", "97e");
+            Console.WriteLine("...");
         }
 
         

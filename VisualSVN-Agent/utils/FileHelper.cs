@@ -37,7 +37,7 @@ namespace VisualSVN_Agent.utils
             var lines = new List<string>();
             using (var sr = new StreamReader(filePath, Encoding.UTF8))
             {
-                String input;
+                string input;
                 while ((input = sr.ReadLine()) != null)
                 {
                     lines.Add(input);

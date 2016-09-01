@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +66,7 @@
     <Compile Include="utils\config.cs" />
     <Compile Include="utils\FileHelper.cs" />
     <Compile Include="utils\LogHelper.cs" />
+    <Compile Include="utils\UnixMd5CryptTool.cs" />
     <Compile Include="VirtualSVNHelper\SVNHelper.cs" />
   </ItemGroup>
   <ItemGroup>
