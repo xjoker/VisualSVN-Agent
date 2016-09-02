@@ -25,6 +25,7 @@ namespace VisualSVN_Agent
             var aada = EncryptsAndDecryptsHelper.Encrypt(responseJson,ProgramSetting.SecretKey,ProgramSetting.AccessKey);
 
             var dfdfd = EncryptsAndDecryptsHelper.Decrypt(Convert.ToString(aada), ProgramSetting.SecretKey, ProgramSetting.AccessKey);
+            WebFunctionHelper.PostToAPI(aada, ProgramSetting.APIurl);
 
             Console.WriteLine("...");
 

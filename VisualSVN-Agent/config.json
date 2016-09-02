@@ -3,7 +3,7 @@
     "path": "C:\\Repositories"
   },
   "APIConfig": {
-    "APIurl": "http://127.0.0.1",
+    "APIurl": "http://192.168.72.60:5000/svn_agent",
     "AccessKey": "zxcvbnmdfrasdfgh",
     "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
   }
