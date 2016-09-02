@@ -81,25 +81,25 @@ namespace VisualSVN_Agent.VirtualSVNHelper
             {
                 // 按行读取文件，确认文件至少药有一行
                 var passwdFile = FileHelper.ReadFileForLines(SVNGroupConfigPath);
-                if (passwdFile.Count>1)
+                if (passwdFile.Count > 1)
                 {
                     foreach (var item in passwdFile)
                     {
                         // 按行读取文件，确认是否有数据
                         string[] line = item.Split(':');
-                        if (line.Length==2)
+                        if (line.Length == 2)
                         {
                             // 切分密码字符串
                             string[] pw = line[1].Split('$');
                             // 构建密码字符串类型
-                            if (pw.Length==3)
+                            if (pw.Length == 3)
                             {
                                 htpasswdPassword hp = new htpasswdPassword();
                                 hp.cryptMode = pw[0];
                                 hp.salt = pw[1];
                                 hp.passwordHash = pw[2];
 
-                                
+
                                 htpasswdUserAndPassword.UsersTable.Add(line[0], hp);
                             }
                         }
@@ -124,13 +124,13 @@ namespace VisualSVN_Agent.VirtualSVNHelper
         /// <param name="username">SVN内存在的用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        public static bool passwordCheck(string username,string password)
+        public static bool passwordCheck(string username, string password)
         {
             if (htpasswdUserAndPassword.UsersTable.ContainsKey(username))
             {
                 var pd = htpasswdUserAndPassword.UsersTable[username];
                 var result = UnixMd5CryptTool.crypt(password, pd.salt, pd.cryptMode);
-                if (result==("$"+pd.cryptMode+"$"+pd.salt+"$"+pd.passwordHash))
+                if (result == ("$" + pd.cryptMode + "$" + pd.salt + "$" + pd.passwordHash))
                 {
                     return true;
                 }
@@ -138,6 +138,62 @@ namespace VisualSVN_Agent.VirtualSVNHelper
 
 
             return false;
+        }
+
+        public static void ReadRepositories()
+        {
+            var SvnAuthzList = FileHelper.GetFileList(ProgramSetting.Repositoriespath, "VisualSVN-SvnAuthz.ini", SearchOption.AllDirectories);
+            foreach (var svnFile in SvnAuthzList)
+            {
+                // 解析配置文件
+                var SvnAuthzFile = FileHelper.ReadFileForLines(svnFile, "[/]");
+                string Reponame = FileHelper.GetGrampaDirectoryName(svnFile);
+                RepoAccessPermisson rap = new RepoAccessPermisson();
+
+
+                //按行解析用户
+                foreach (var a in SvnAuthzFile)
+                {
+                    if (!string.IsNullOrWhiteSpace(a))
+                    {
+                        string[] userAndPermissions = a.Split('=');
+                        string Username = userAndPermissions[0];
+
+                        // 权限
+                        RepoAccessPermissionDetails rapd = new RepoAccessPermissionDetails();
+
+                        // Read Only
+                        if (userAndPermissions[1].Contains('r'))
+                        {
+                            rapd.Read = true;
+                        }
+                        // Read / Write
+                        if (userAndPermissions[1].Contains("rw"))
+                        {
+                            rapd.Write = true;
+                        }
+
+                        // No Access
+                        if (!(userAndPermissions[1].Contains('r') || userAndPermissions[1].Contains('w')))
+                        {
+                            rapd.NoAccess = true;
+                        }
+
+                        // is Group?
+                        if (userAndPermissions[0].StartsWith("@"))
+                        {
+                            rapd.IsGroup = true;
+                            Username = Username.Substring(Username.IndexOf("@") + 1);
+                        }
+
+                        rap.Permission.Add(Username, rapd);
+
+                    }
+                }// end foreach
+
+                RepoDataSourcePermission.RepoPermissons.Add(Reponame, rap);
+                
+            }
         }
     }
 }

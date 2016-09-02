@@ -32,19 +32,78 @@ namespace VisualSVN_Agent.utils
         /// </summary>
         /// <param name="filePath">文件路径</param>
         /// <returns>返回List类型</returns>
-        public static List<string> ReadFileForLines(string filePath)
+        public static List<string> ReadFileForLines(string filePath,string startTag="")
         {
             var lines = new List<string>();
             using (var sr = new StreamReader(filePath, Encoding.UTF8))
             {
                 string input;
+                bool Tag = false;
                 while ((input = sr.ReadLine()) != null)
                 {
-                    lines.Add(input);
+                    // 判断是否有起始标志
+                    if (startTag!="")
+                    {
+                        if (Tag)
+                        {
+                            lines.Add(input);
+                        }
+                        if (input.Contains(startTag))
+                        {
+                            Tag = true;
+                        }
+
+                    }
+                    // 没有则为默认起始
+                    else
+                    {
+                        lines.Add(input);
+                    }
+                    
                 }
             }
             return lines;
         }
+
+        /// <summary>
+        /// 返回上层路径的文件夹名
+        /// </summary>
+        /// <param name="path">路径</param>
+        /// <returns>如果返回失败则为空字符串</returns>
+        public static string GetParentDirectoryName(string path)
+        {
+            try
+            {
+                DirectoryInfo dirInfo = Directory.GetParent(path);
+                return Path.GetFileName(dirInfo.FullName);
+
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+
+        /// <summary>
+        /// 返回当前路径上两层的文件夹名
+        /// </summary>
+        /// <param name="path">路径</param>
+        /// <returns>如果返回失败则为空字符串</returns>
+        public static string GetGrampaDirectoryName(string path)
+        {
+            try
+            {
+                DirectoryInfo dirInfo = Directory.GetParent(path);
+                DirectoryInfo dirInfo1 = Directory.GetParent(dirInfo.FullName);
+                return Path.GetFileName(dirInfo1.FullName);
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
 
         /// <summary>
         /// 一次性读取文件所有内容
