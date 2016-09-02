@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 namespace VisualSVN_Agent.utils
 {
+
     //程序的配置存储
     public static class ProgramSetting
     {
@@ -10,8 +11,13 @@ namespace VisualSVN_Agent.utils
         public static string ProgramInPath { get; set; }
         // 配置文件位置
         public static string ConfigFilePath { get; set; }
-
+        // API地址
+        public static string APIurl { get; set; }
+        // API 加密密钥
+        public static string AccessKey { get; set; }
+        public static string SecretKey { get; set; }
     }
+
 
     /// <summary>
     /// 用户账号密码表
@@ -55,7 +61,7 @@ namespace VisualSVN_Agent.utils
         {
             Permission = new Dictionary<string, RepoAccessPermissionDetails>();
         }
-        public Dictionary<string,RepoAccessPermissionDetails> Permission { get; set; }
+        public Dictionary<string, RepoAccessPermissionDetails> Permission { get; set; }
     }
 
     /// <summary>
@@ -69,6 +75,8 @@ namespace VisualSVN_Agent.utils
         public bool Write { get; set; }
     }
 
+    // config.json 配置文件
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 
     /// <summary>
     /// 读取配置文件的方法
@@ -76,6 +84,7 @@ namespace VisualSVN_Agent.utils
     public class RootObject
     {
         public Repositories Repositories { get; set; }
+        public APIConfig APIConfig { get; set; }
     }
 
     /// <summary>
@@ -85,4 +94,13 @@ namespace VisualSVN_Agent.utils
     {
         public string path { get; set; }
     }
+
+    public class APIConfig
+    {
+        public string APIurl { get; set; }
+        public string AccessKey { get; set; }
+        public string SecretKey { get; set; }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 }

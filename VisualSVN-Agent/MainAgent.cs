@@ -31,6 +31,9 @@ namespace VisualSVN_Agent
                 string response=File.ReadAllText(ProgramSetting.ConfigFilePath);
                 var responseJson=JsonConvert.DeserializeObject<RootObject>(response);
                 ProgramSetting.Repositoriespath = responseJson.Repositories.path;
+                ProgramSetting.APIurl = responseJson.APIConfig.APIurl;
+                ProgramSetting.AccessKey = responseJson.APIConfig.AccessKey;
+                ProgramSetting.SecretKey = responseJson.APIConfig.SecretKey;
                 MainFunction.MainRunFunction();
             }
             else

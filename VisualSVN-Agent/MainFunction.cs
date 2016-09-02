@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 using VisualSVN_Agent.utils;
 
 namespace VisualSVN_Agent
@@ -18,6 +20,11 @@ namespace VisualSVN_Agent
             var bbb = RepoDataSourcePermission.RepoPermissons;
             FileWatcherHelper fwh = new FileWatcherHelper();
             fwh.WatcherStrat(@"C:\Repositories", "VisualSVN-SvnAuthz.ini");
+            var responseJson = JsonConvert.SerializeObject(bbb);
+
+            var aada = EncryptsAndDecryptsHelper.Encrypt(responseJson,ProgramSetting.SecretKey,ProgramSetting.AccessKey);
+
+            var dfdfd = EncryptsAndDecryptsHelper.Decrypt(Convert.ToString(aada), ProgramSetting.SecretKey, ProgramSetting.AccessKey);
 
             Console.WriteLine("...");
 

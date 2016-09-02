@@ -1,5 +1,11 @@
 ﻿{
   "Repositories": {
     "path": "C:\\Repositories"
+  },
+  "APIConfig": {
+    "APIurl": "http://127.0.0.1",
+    "AccessKey": "zxcvbnmdfrasdfgh",
+    "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
   }
+
 }
