@@ -14,7 +14,7 @@ namespace VisualSVN_Agent
         {   
             
             string[] file = FileHelper.GetFileList(ProgramSetting.Repositoriespath, "VisualSVN-SvnAuthz.ini", SearchOption.AllDirectories);
-            VirtualSVNHelper.SVNHelper.ReadRepositories();
+            VirtualSVNHelper.SVNHelper.ReadRepositoriesAll();
             var bbb = RepoDataSourcePermission.RepoPermissons;
             Console.WriteLine("...");
 

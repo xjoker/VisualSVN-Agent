@@ -140,14 +140,20 @@ namespace VisualSVN_Agent.VirtualSVNHelper
             return false;
         }
 
-        public static void ReadRepositories()
+
+        /// <summary>
+        /// 读取 VisualSVN-SvnAuthz.ini 文件的方法
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <returns>仓库的详细权限表</returns>
+        public static Dictionary<string, RepoAccessPermisson> ReadRepositoriesFile(string filePath)
         {
-            var SvnAuthzList = FileHelper.GetFileList(ProgramSetting.Repositoriespath, "VisualSVN-SvnAuthz.ini", SearchOption.AllDirectories);
-            foreach (var svnFile in SvnAuthzList)
+
+            if (File.Exists(filePath))
             {
                 // 解析配置文件
-                var SvnAuthzFile = FileHelper.ReadFileForLines(svnFile, "[/]");
-                string Reponame = FileHelper.GetGrampaDirectoryName(svnFile);
+                var SvnAuthzFile = FileHelper.ReadFileForLines(filePath, "[/]");
+                string Reponame = FileHelper.GetGrampaDirectoryName(filePath);
                 RepoAccessPermisson rap = new RepoAccessPermisson();
 
 
@@ -189,11 +195,53 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                         rap.Permission.Add(Username, rapd);
 
                     }
-                }// end foreach
 
-                RepoDataSourcePermission.RepoPermissons.Add(Reponame, rap);
-                
+                }
+                Dictionary<string, RepoAccessPermisson> rdsp = new Dictionary<string, RepoAccessPermisson>();
+                rdsp.Add(Reponame, rap);
+                return rdsp;
             }
+            else
+            {
+                LogHelper.WriteLog("指定路径不存在 VisualSVN-SvnAuthz.ini 文件", LogHelper.Log4NetLevel.Error);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 读取所有仓库文件夹内的权限
+        /// </summary>
+        public static void ReadRepositoriesAll()
+        {
+            var SvnAuthzList = FileHelper.GetFileList(ProgramSetting.Repositoriespath, "VisualSVN-SvnAuthz.ini", SearchOption.AllDirectories);
+            Dictionary<string, RepoAccessPermisson> bbb = new Dictionary<string, RepoAccessPermisson>();
+            foreach (var svnFile in SvnAuthzList)
+            {
+                var res = ReadRepositoriesFile(svnFile);
+                bbb = MergeDictionary(bbb, res);
+            }
+
+            RepoDataSourcePermission.RepoPermissons = bbb;
+        }
+
+        /// <summary>
+        /// 合并仓库权限表
+        /// </summary>
+        /// <param name="first">字典合并的目标</param>
+        /// <param name="second">被合并的目标</param>
+        /// <returns></returns>
+        public static Dictionary<string, RepoAccessPermisson> MergeDictionary(Dictionary<string, RepoAccessPermisson> first, Dictionary<string, RepoAccessPermisson> second)
+        {
+            if (first == null) first = new Dictionary<string, RepoAccessPermisson>();
+            if (second == null) return first;
+
+            //相对于第一种只是修改了遍历的方法
+            foreach (string key in second.Keys)
+            {
+                if (!first.ContainsKey(key))
+                    first.Add(key, second[key]);
+            }
+            return first;
         }
     }
 }

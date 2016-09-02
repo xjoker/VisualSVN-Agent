@@ -31,27 +31,12 @@ namespace VisualSVN_Agent.utils
         public string passwordHash { get; set; }
     }
 
-    /// <summary>
-    /// 仓库权限 List
-    /// </summary>
-    public class RepoPermission
-    {
-        //static RepoPermission()
-        //{
-        //    Repo = new List<RepoDataSourcePermission>();
-        //}
-        //public static List<RepoDataSourcePermission> Repo { get; set; }
-
-    
-    }
 
     /// <summary>
     /// 存储仓库名称与对应的权限表
     /// </summary>
     public class RepoDataSourcePermission
     {
-        //public string DataName { get; set; }
-        //public RepoAccessPermisson RepoPermissons { get; set; }
 
         static RepoDataSourcePermission()
         {
@@ -66,10 +51,6 @@ namespace VisualSVN_Agent.utils
     /// </summary>
     public class RepoAccessPermisson
     {
-        //public string UserOrGroup { get; set; }
-        //public RepoAccessPermissionDetails Permission { get; set; }
-
-
         public RepoAccessPermisson()
         {
             Permission = new Dictionary<string, RepoAccessPermissionDetails>();
