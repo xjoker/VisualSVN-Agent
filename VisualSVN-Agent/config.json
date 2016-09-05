@@ -4,7 +4,7 @@
   },
   "APIConfig": {
     "APIurl": "http://192.168.72.60:5000/svn_agent",
-    "AccessKey": "zxcvbnmdfrasdfgh",
+    "IV": "zxcvbnmdfrasdfgh",
     "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
   }
 

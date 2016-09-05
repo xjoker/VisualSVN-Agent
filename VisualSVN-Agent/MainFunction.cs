@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using VisualSVN_Agent.utils;
+using VisualSVN_Agent.Model;
 
 namespace VisualSVN_Agent
 {
@@ -20,12 +21,19 @@ namespace VisualSVN_Agent
             var bbb = RepoDataSourcePermission.RepoPermissons;
             FileWatcherHelper fwh = new FileWatcherHelper();
             fwh.WatcherStrat(@"C:\Repositories", "VisualSVN-SvnAuthz.ini");
-            var responseJson = JsonConvert.SerializeObject(bbb);
+            var requestJson = JsonConvert.SerializeObject(bbb);
 
-            var aada = EncryptsAndDecryptsHelper.Encrypt(responseJson,ProgramSetting.SecretKey,ProgramSetting.AccessKey);
+            JsonPostModel jpm = new JsonPostModel();
+            jpm.Agent = JsonPostModelAgent.Client.ToString();
+            jpm.DataType = JsonPostModelDataType.AllUserTable.ToString();
+            jpm.Data = bbb;
+            string output = JsonConvert.SerializeObject(jpm);
 
-            var dfdfd = EncryptsAndDecryptsHelper.Decrypt(Convert.ToString(aada), ProgramSetting.SecretKey, ProgramSetting.AccessKey);
-            WebFunctionHelper.PostToAPI(aada, ProgramSetting.APIurl);
+            var aada = EncryptsAndDecryptsHelper.Encrypt(output, ProgramSetting.SecretKey);
+
+            var dfdfd = EncryptsAndDecryptsHelper.Decrypt(aada, ProgramSetting.SecretKey);
+
+            var basdf=WebFunctionHelper.PostToAPI(aada, ProgramSetting.APIurl);
 
             Console.WriteLine("...");
 

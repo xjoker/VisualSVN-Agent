@@ -14,7 +14,7 @@ namespace VisualSVN_Agent.utils
         // API地址
         public static string APIurl { get; set; }
         // API 加密密钥
-        public static string AccessKey { get; set; }
+        public static string IV { get; set; }
         public static string SecretKey { get; set; }
     }
 
@@ -98,7 +98,7 @@ namespace VisualSVN_Agent.utils
     public class APIConfig
     {
         public string APIurl { get; set; }
-        public string AccessKey { get; set; }
+        public string IV { get; set; }
         public string SecretKey { get; set; }
     }
 
