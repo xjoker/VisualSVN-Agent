@@ -31,6 +31,9 @@ namespace VisualSVN_Agent
                 LogHelper.WriteLog("初始化时发送所有仓库信息出现错误", LogHelper.Log4NetLevel.Error);
             }
 
+            // 初始化 读取用户组信息
+            groupList.userGroup = SVNHelper.GetAllUserAndGroup();
+
 
             // 初始化 读取所有用户的密码表
             SVNHelper.htpasswdRead();
@@ -43,9 +46,11 @@ namespace VisualSVN_Agent
                 LogHelper.WriteLog("初始化时发送用户密码信息出现错误", LogHelper.Log4NetLevel.Error);
             }
 
+            
+
 
             // 启动仓库权限文件监控
-            FileWatcherHelper fwh = new FileWatcherHelper();
+            SVNFileWatcherHelper fwh = new SVNFileWatcherHelper();
             fwh.WatcherStrat(@"C:\Repositories", "VisualSVN-SvnAuthz.ini");
 
             // 启动htpasswd文件监控

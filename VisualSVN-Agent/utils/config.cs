@@ -19,9 +19,23 @@ namespace VisualSVN_Agent.utils
     }
 
 
+
+    /// <summary>
+    /// 用于存储用户和用户组的关系
+    /// </summary>
+    public class groupList
+    {
+        static groupList()
+        {
+            userGroup = new Dictionary<string, List<string>>();
+        }
+        public static Dictionary<string, List<string>> userGroup;
+    }
+
+
     /// <summary>
     /// 用户账号密码表
-    /// </summary>
+    /// </summary>userGroup
     public class htpasswdUserAndPassword
     {
         static htpasswdUserAndPassword()
@@ -36,6 +50,7 @@ namespace VisualSVN_Agent.utils
     /// </summary>
     public class htpasswdPassword
     {
+        public string userGroup { get; set; }
         public string cryptMode { get; set; }
         public string salt { get; set; }
         public string passwordHash { get; set; }

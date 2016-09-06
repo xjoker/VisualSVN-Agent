@@ -71,7 +71,6 @@
     <Compile Include="utils\LogHelper.cs" />
     <Compile Include="utils\UnixMd5CryptTool.cs" />
     <Compile Include="utils\WebFunctionHelper.cs" />
-    <Compile Include="VirtualSVNHelper\htpasswdWatcher.cs" />
     <Compile Include="VirtualSVNHelper\SVNHelper.cs" />
   </ItemGroup>
   <ItemGroup>

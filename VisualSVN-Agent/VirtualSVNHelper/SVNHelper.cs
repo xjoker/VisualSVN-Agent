@@ -101,6 +101,15 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                                 hp.salt = pw[1];
                                 hp.passwordHash = pw[2];
 
+                                foreach (var g in groupList.userGroup)
+                                {
+                                    if (g.Value.Contains(line[0]))
+                                    {
+                                        hp.userGroup = g.Key;
+                                    }
+                                }
+
+
 
                                 htpasswdUserAndPassword.UsersTable.Add(line[0], hp);
                             }
