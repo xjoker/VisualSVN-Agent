@@ -61,6 +61,10 @@ namespace VisualSVN_Agent.utils
             }
             catch (Exception ex)
             {
+#if DEBUG
+                Console.WriteLine(ex.ToString());
+#endif
+
                 LogHelper.WriteLog("连接API出现错误:" + ex.ToString(), LogHelper.Log4NetLevel.Error);
             }
 

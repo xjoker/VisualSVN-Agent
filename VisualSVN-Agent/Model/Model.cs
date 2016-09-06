@@ -46,6 +46,15 @@ namespace VisualSVN_Agent.Model
     }
 
     /// <summary>
+    /// 删除repo时用到的属性
+    /// </summary>
+    public class DelRepo
+    {
+        public string RepoName { get; set; }
+    }
+
+
+    /// <summary>
     /// 消息类型
     /// </summary>
     public enum JsonPostModelDataType
@@ -53,6 +62,7 @@ namespace VisualSVN_Agent.Model
         AllUserTable,
         NewRepo,
         DelRepo,
+        ChangeRepo,
         AllAuthInfo,
         Other
     }
