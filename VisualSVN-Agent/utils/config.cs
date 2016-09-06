@@ -22,8 +22,12 @@ namespace VisualSVN_Agent.utils
     /// <summary>
     /// 用户账号密码表
     /// </summary>
-    public static class htpasswdUserAndPassword
+    public class htpasswdUserAndPassword
     {
+        static htpasswdUserAndPassword()
+        {
+            UsersTable = new Dictionary<string, htpasswdPassword>();
+        }
         public static Dictionary<string, htpasswdPassword> UsersTable { get; set; }
     }
 

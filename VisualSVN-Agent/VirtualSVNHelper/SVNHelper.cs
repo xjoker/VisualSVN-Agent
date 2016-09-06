@@ -77,6 +77,8 @@ namespace VisualSVN_Agent.VirtualSVNHelper
         {
             string SVNGroupConfigPath = FileHelper.Combine(ProgramSetting.Repositoriespath, "htpasswd");
 
+            htpasswdUserAndPassword.UsersTable.Clear();
+
             if (File.Exists(SVNGroupConfigPath))
             {
                 // 按行读取文件，确认文件至少药有一行
@@ -89,8 +91,8 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                         string[] line = item.Split(':');
                         if (line.Length == 2)
                         {
-                            // 切分密码字符串
-                            string[] pw = line[1].Split('$');
+                            // 切分密码字符串 并去除空切分
+                            string[] pw = line[1].Split(new char[] { '$' }, StringSplitOptions.RemoveEmptyEntries);
                             // 构建密码字符串类型
                             if (pw.Length == 3)
                             {
@@ -115,7 +117,6 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                 LogHelper.WriteLog("htpasswd 文件不存在", LogHelper.Log4NetLevel.Error);
             }
         }
-
 
 
         /// <summary>
@@ -218,7 +219,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
             foreach (var svnFile in SvnAuthzList)
             {
                 var res = ReadRepositoriesFile(svnFile);
-                bbb = MergeDictionary(bbb, res);
+                bbb = MergeRepoDictionary(bbb, res);
             }
 
             RepoDataSourcePermission.RepoPermissons = bbb;
@@ -230,12 +231,11 @@ namespace VisualSVN_Agent.VirtualSVNHelper
         /// <param name="first">字典合并的目标</param>
         /// <param name="second">被合并的目标</param>
         /// <returns></returns>
-        public static Dictionary<string, RepoAccessPermisson> MergeDictionary(Dictionary<string, RepoAccessPermisson> first, Dictionary<string, RepoAccessPermisson> second)
+        public static Dictionary<string, RepoAccessPermisson> MergeRepoDictionary(Dictionary<string, RepoAccessPermisson> first, Dictionary<string, RepoAccessPermisson> second)
         {
             if (first == null) first = new Dictionary<string, RepoAccessPermisson>();
             if (second == null) return first;
 
-            //相对于第一种只是修改了遍历的方法
             foreach (string key in second.Keys)
             {
                 if (!first.ContainsKey(key))
@@ -243,5 +243,6 @@ namespace VisualSVN_Agent.VirtualSVNHelper
             }
             return first;
         }
+
     }
 }
