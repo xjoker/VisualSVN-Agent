@@ -22,9 +22,10 @@ namespace VisualSVN_Agent
         protected override void OnStart(string[] args)
         {
             // 基本变量写入配置
-            ProgramSetting.ProgramInPath = Environment.CurrentDirectory;
-            ProgramSetting.ConfigFilePath = FileHelper.Combine(Environment.CurrentDirectory, "config.json");
+            ProgramSetting.ProgramInPath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            ProgramSetting.ConfigFilePath = FileHelper.Combine(ProgramSetting.ProgramInPath, "config.json");
 
+            LogHelper.WriteLog(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), LogHelper.Log4NetLevel.Info);
             // 读取配置文件
             if (File.Exists(ProgramSetting.ConfigFilePath))
             {

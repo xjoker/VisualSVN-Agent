@@ -1,4 +1,6 @@
-﻿namespace VisualSVN_Agent
+﻿using System.ServiceProcess;
+
+namespace VisualSVN_Agent
 {
     static class Program
     {
@@ -18,7 +20,7 @@
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Service1()
+                new MainAgent()
             };
             ServiceBase.Run(ServicesToRun);
         

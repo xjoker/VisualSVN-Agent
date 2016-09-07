@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace VisualSVN_Agent.utils
@@ -27,41 +28,50 @@ namespace VisualSVN_Agent.utils
             return string.Empty;
         }
 
+
+
         /// <summary>
-        /// 逐行读取文件
+        /// 逐行读取文件 默认延时500ms 防止文件还在锁状态
         /// </summary>
         /// <param name="filePath">文件路径</param>
+        /// <param name="startTag">起始标识符</param>
+        /// <param name="sleep">启用延时</param>
         /// <returns>返回List类型</returns>
-        public static List<string> ReadFileForLines(string filePath,string startTag="")
+        public static List<string> ReadFileForLines(string filePath,string startTag="",bool sleep=true)
         {
             var lines = new List<string>();
-            using (var sr = new StreamReader(filePath, Encoding.UTF8))
+            if (sleep) Thread.Sleep(500);
+            using (FileStream fs=new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                string input;
-                bool Tag = false;
-                while ((input = sr.ReadLine()) != null)
+                using (var sr = new StreamReader(fs, Encoding.UTF8))
                 {
-                    // 判断是否有起始标志
-                    if (startTag!="")
+                    string input;
+                    bool Tag = false;
+                    while ((input = sr.ReadLine()) != null)
                     {
-                        if (Tag)
+                        // 判断是否有起始标志
+                        if (startTag != "")
+                        {
+                            if (Tag)
+                            {
+                                lines.Add(input);
+                            }
+                            if (input.Contains(startTag))
+                            {
+                                Tag = true;
+                            }
+
+                        }
+                        // 没有则为默认起始
+                        else
                         {
                             lines.Add(input);
                         }
-                        if (input.Contains(startTag))
-                        {
-                            Tag = true;
-                        }
 
                     }
-                    // 没有则为默认起始
-                    else
-                    {
-                        lines.Add(input);
-                    }
-                    
                 }
             }
+
             return lines;
         }
 
