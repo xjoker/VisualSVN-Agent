@@ -327,7 +327,11 @@ namespace VisualSVN_Agent.utils
 
         private static void OnChanged(object source, FileSystemEventArgs e)
         {
+            // 刷新用户组
             groupList.userGroup = SVNHelper.GetAllUserAndGroup();
+
+            // 刷新用户表
+            SVNHelper.htpasswdRead();
 
             bool is_Success = false;
             int reTryCount = 3;
@@ -338,7 +342,7 @@ namespace VisualSVN_Agent.utils
                 JsonPostModel jpm = new JsonPostModel();
                 jpm.Agent = JsonPostModelAgent.Client.ToString();
                 jpm.DataType = JsonPostModelDataType.AllAuthInfo.ToString();
-                jpm.Data = groupList.userGroup;
+                jpm.Data = htpasswdUserAndPassword.UsersTable;
                 is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), ProgramSetting.SecretKey), ProgramSetting.APIurl);
                 if (is_Success)
                 {

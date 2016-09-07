@@ -57,6 +57,10 @@ namespace VisualSVN_Agent
             htpasswdWatcher hw = new htpasswdWatcher();
             hw.WatcherStrat(@"C:\Repositories", "htpasswd");
 
+            // 启动用户组文件监控
+            groupFileWatcher gfw = new groupFileWatcher();
+            gfw.WatcherStrat(@"C:\Repositories", "groups.conf");
+
             Console.WriteLine("程序启动");
             LogHelper.WriteLog("程序启动完成.", LogHelper.Log4NetLevel.Info);
 
