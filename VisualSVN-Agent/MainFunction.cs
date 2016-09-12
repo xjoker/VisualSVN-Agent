@@ -1,11 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
 using VisualSVN_Agent.utils;
 using VisualSVN_Agent.Model;
 using VisualSVN_Agent.VirtualSVNHelper;
@@ -19,8 +13,17 @@ namespace VisualSVN_Agent
             string encryptsJson = "";
 
             // 初始化 读取所有仓库的信息
-            SVNHelper.ReadRepositoriesAll();
+            try
+            {
+                SVNHelper.ReadRepositoriesAll();
+                LogHelper.WriteLog("仓库信息初始化完成", LogHelper.Log4NetLevel.Info);
+            }
+            catch (Exception ex)
+            {
 
+                LogHelper.WriteLog("初始化仓库出现错误\n"+ex, LogHelper.Log4NetLevel.Error);
+            }
+            
             JsonPostModel jpm = new JsonPostModel();
             jpm.Agent = JsonPostModelAgent.Client.ToString();
             jpm.DataType = JsonPostModelDataType.AllUserTable.ToString();
@@ -32,11 +35,28 @@ namespace VisualSVN_Agent
             }
 
             // 初始化 读取用户组信息
-            groupList.userGroup = SVNHelper.GetAllUserAndGroup();
+            try
+            {
+                groupList.userGroup = SVNHelper.GetAllUserAndGroup();
+                LogHelper.WriteLog("用户与用户组信息初始化完成", LogHelper.Log4NetLevel.Info);
+            }
+            catch (Exception ex)
+            {
 
+                LogHelper.WriteLog("初始化用户信息出现错误\n" + ex, LogHelper.Log4NetLevel.Error);
+            }
 
             // 初始化 读取所有用户的密码表
-            SVNHelper.htpasswdRead();
+            try
+            {
+                SVNHelper.htpasswdRead();
+                LogHelper.WriteLog("用户密码表信息初始化完成", LogHelper.Log4NetLevel.Info);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("初始化用户密码表信息出现错误\n" + ex, LogHelper.Log4NetLevel.Error);
+            }
+
             jpm.Agent = JsonPostModelAgent.Client.ToString();
             jpm.DataType = JsonPostModelDataType.AllAuthInfo.ToString();
             jpm.Data = htpasswdUserAndPassword.UsersTable;
@@ -46,20 +66,44 @@ namespace VisualSVN_Agent
                 LogHelper.WriteLog("初始化时发送用户密码信息出现错误", LogHelper.Log4NetLevel.Error);
             }
 
-            
 
+            LogHelper.WriteLog("启动文件监控", LogHelper.Log4NetLevel.Info);
 
             // 启动仓库权限文件监控
-            SVNFileWatcherHelper fwh = new SVNFileWatcherHelper();
-            fwh.WatcherStrat(@"C:\Repositories", "VisualSVN-SvnAuthz.ini");
+            try
+            {
+                SVNFileWatcherHelper fwh = new SVNFileWatcherHelper();
+                fwh.WatcherStrat(ProgramSetting.Repositoriespath, "VisualSVN-SvnAuthz.ini");
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("启动 VisualSVN-SvnAuthz.ini 监控出现错误： " + ex.ToString(), LogHelper.Log4NetLevel.Error);
+                throw;
+            }
 
             // 启动htpasswd文件监控
-            htpasswdWatcher hw = new htpasswdWatcher();
-            hw.WatcherStrat(@"C:\Repositories", "htpasswd");
+            try
+            {
+                htpasswdWatcher hw = new htpasswdWatcher();
+                hw.WatcherStrat(ProgramSetting.Repositoriespath, "htpasswd");
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("启动 htpasswd 监控出现错误： " + ex.ToString(), LogHelper.Log4NetLevel.Error);
+                throw;
+            }
 
             // 启动用户组文件监控
-            groupFileWatcher gfw = new groupFileWatcher();
-            gfw.WatcherStrat(@"C:\Repositories", "groups.conf");
+            try
+            {
+                groupFileWatcher gfw = new groupFileWatcher();
+                gfw.WatcherStrat(ProgramSetting.Repositoriespath, "groups.conf");
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("启动 groups.conf 监控出现错误： " + ex.ToString(), LogHelper.Log4NetLevel.Error);
+                throw;
+            }
 
             Console.WriteLine("程序启动");
             LogHelper.WriteLog("程序启动完成.", LogHelper.Log4NetLevel.Info);

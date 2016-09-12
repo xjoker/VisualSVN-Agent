@@ -159,63 +159,70 @@ namespace VisualSVN_Agent.VirtualSVNHelper
         public static Dictionary<string, RepoAccessPermisson> ReadRepositoriesFile(string filePath)
         {
 
-            if (File.Exists(filePath))
+            try
             {
-                // 解析配置文件
-                var SvnAuthzFile = FileHelper.ReadFileForLines(filePath, "[/]");
-                string Reponame = FileHelper.GetGrampaDirectoryName(filePath);
-                RepoAccessPermisson rap = new RepoAccessPermisson();
-
-
-                //按行解析用户
-                foreach (var a in SvnAuthzFile)
+                if (File.Exists(filePath))
                 {
-                    if (!string.IsNullOrWhiteSpace(a))
+                    // 解析配置文件
+                    var SvnAuthzFile = FileHelper.ReadFileForLines(filePath, "[/");
+                    string Reponame = FileHelper.GetGrampaDirectoryName(filePath);
+                    RepoAccessPermisson rap = new RepoAccessPermisson();
+
+                    //按行解析用户
+                    foreach (var a in SvnAuthzFile)
                     {
-                        string[] userAndPermissions = a.Split('=');
-                        string Username = userAndPermissions[0];
-
-                        // 权限
-                        RepoAccessPermissionDetails rapd = new RepoAccessPermissionDetails();
-
-                        // Read Only
-                        if (userAndPermissions[1].Contains('r'))
+                        if (!string.IsNullOrWhiteSpace(a))
                         {
-                            rapd.Read = true;
-                        }
-                        // Read / Write
-                        if (userAndPermissions[1].Contains("rw"))
-                        {
-                            rapd.Write = true;
-                        }
+                            string[] userAndPermissions = a.Split('=');
+                            string Username = userAndPermissions[0];
 
-                        // No Access
-                        if (!(userAndPermissions[1].Contains('r') || userAndPermissions[1].Contains('w')))
-                        {
-                            rapd.NoAccess = true;
-                        }
+                            // 权限
+                            RepoAccessPermissionDetails rapd = new RepoAccessPermissionDetails();
 
-                        // is Group?
-                        if (userAndPermissions[0].StartsWith("@"))
-                        {
-                            rapd.IsGroup = true;
-                            Username = Username.Substring(Username.IndexOf("@") + 1);
-                        }
+                            // Read Only
+                            if (userAndPermissions[1].Contains('r'))
+                            {
+                                rapd.Read = true;
+                            }
+                            // Read / Write
+                            if (userAndPermissions[1].Contains("rw"))
+                            {
+                                rapd.Write = true;
+                            }
 
-                        rap.Permission.Add(Username, rapd);
+                            // No Access
+                            if (!(userAndPermissions[1].Contains('r') || userAndPermissions[1].Contains('w')))
+                            {
+                                rapd.NoAccess = true;
+                            }
+
+                            // is Group?
+                            if (userAndPermissions[0].StartsWith("@"))
+                            {
+                                rapd.IsGroup = true;
+                                Username = Username.Substring(Username.IndexOf("@") + 1);
+                            }
+
+                            rap.Permission.Add(Username, rapd);
+
+                        }
 
                     }
-
+                    Dictionary<string, RepoAccessPermisson> rdsp = new Dictionary<string, RepoAccessPermisson>();
+                    rdsp.Add(Reponame, rap);
+                    return rdsp;
                 }
-                Dictionary<string, RepoAccessPermisson> rdsp = new Dictionary<string, RepoAccessPermisson>();
-                rdsp.Add(Reponame, rap);
-                return rdsp;
+                else
+                {
+                    LogHelper.WriteLog("指定路径不存在 VisualSVN-SvnAuthz.ini 文件", LogHelper.Log4NetLevel.Error);
+                }
+                return null;
             }
-            else
+            catch (Exception ex)
             {
-                LogHelper.WriteLog("指定路径不存在 VisualSVN-SvnAuthz.ini 文件", LogHelper.Log4NetLevel.Error);
+                LogHelper.WriteLog(ex.StackTrace);
+                return null;
             }
-            return null;
         }
 
         /// <summary>
@@ -228,7 +235,10 @@ namespace VisualSVN_Agent.VirtualSVNHelper
             foreach (var svnFile in SvnAuthzList)
             {
                 var res = ReadRepositoriesFile(svnFile);
-                bbb = MergeRepoDictionary(bbb, res);
+                if (res!=null)
+                {
+                    bbb = MergeRepoDictionary(bbb, res);
+                }
             }
 
             RepoDataSourcePermission.RepoPermissons = bbb;

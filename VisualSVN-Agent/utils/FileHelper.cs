@@ -40,7 +40,7 @@ namespace VisualSVN_Agent.utils
         public static List<string> ReadFileForLines(string filePath,string startTag="",bool sleep=true)
         {
             var lines = new List<string>();
-            if (sleep) Thread.Sleep(500);
+            if (sleep) Thread.Sleep(300);
             using (FileStream fs=new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 using (var sr = new StreamReader(fs, Encoding.UTF8))

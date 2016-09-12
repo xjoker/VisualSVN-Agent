@@ -3,6 +3,7 @@ using System.IO;
 using System.ServiceProcess;
 using VisualSVN_Agent.utils;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace VisualSVN_Agent
 {
@@ -17,7 +18,7 @@ namespace VisualSVN_Agent
         {
             OnStart(null);
         }
-
+        Thread mainThread = new Thread(new ThreadStart(MainFunction.MainRunFunction));
 
         protected override void OnStart(string[] args)
         {
@@ -25,7 +26,7 @@ namespace VisualSVN_Agent
             ProgramSetting.ProgramInPath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             ProgramSetting.ConfigFilePath = FileHelper.Combine(ProgramSetting.ProgramInPath, "config.json");
 
-            LogHelper.WriteLog(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), LogHelper.Log4NetLevel.Info);
+            LogHelper.WriteLog("程序所在路径："+ ProgramSetting.ProgramInPath, LogHelper.Log4NetLevel.Info);
             // 读取配置文件
             if (File.Exists(ProgramSetting.ConfigFilePath))
             {
@@ -35,7 +36,13 @@ namespace VisualSVN_Agent
                 ProgramSetting.APIurl = responseJson.APIConfig.APIurl;
                 ProgramSetting.IV = responseJson.APIConfig.IV;
                 ProgramSetting.SecretKey = responseJson.APIConfig.SecretKey;
+                LogHelper.WriteLog("配置读取完成！", LogHelper.Log4NetLevel.Info);
+#if DEBUG
                 MainFunction.MainRunFunction();
+#else
+                mainThread.Start();
+#endif
+                
             }
             else
             {
@@ -48,7 +55,8 @@ namespace VisualSVN_Agent
 
         protected override void OnStop()
         {
-            
+            LogHelper.WriteLog("服务停止中...", LogHelper.Log4NetLevel.Info);
+            mainThread.Abort();
         }
     }
 }
