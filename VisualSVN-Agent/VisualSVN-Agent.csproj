@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="MainFunction.cs" />
     <Compile Include="Model\Model.cs" />
+    <Compile Include="Model\RemoteCommandModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -78,7 +79,9 @@
     <Compile Include="utils\FileWatcherHelper.cs" />
     <Compile Include="utils\LogHelper.cs" />
     <Compile Include="utils\UnixMd5CryptTool.cs" />
+    <Compile Include="utils\VisualSVN_WMI_Api.cs" />
     <Compile Include="utils\WebFunctionHelper.cs" />
+    <Compile Include="VirtualSVNHelper\RemoteCommandMonitoring.cs" />
     <Compile Include="VirtualSVNHelper\SVNHelper.cs" />
   </ItemGroup>
   <ItemGroup>
