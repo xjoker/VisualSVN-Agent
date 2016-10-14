@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using VisualSVN_Agent.Model;
 
 namespace VisualSVN_Agent.utils
 {
@@ -56,7 +57,7 @@ namespace VisualSVN_Agent.utils
                     {
                         LogHelper.WriteLog("服务端返回状态有误，可能是密钥不对:\n" + ex.ToString(), LogHelper.Log4NetLevel.Error);
                     }
-                    //if (result == "True") is_success = true;
+
                 }
             }
             catch (Exception ex)
@@ -71,6 +72,64 @@ namespace VisualSVN_Agent.utils
 
 
             return is_success;
+        }
+
+
+
+        /// <summary>
+        /// 接收命令
+        /// </summary>
+        /// <param name="jsonTxt">传入 Json 文本</param>
+        /// <param name="url">API 地址</param>
+        /// <returns>返回值</returns>
+        public static RemoteCommand GetCmd(string jsonTxt, string url)
+        {
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+            try
+            {
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    string postJSON = "{\"Data\":\"" + jsonTxt + "\"}";
+                    streamWriter.Write(postJSON);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+
+
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                    var resp = EncryptsAndDecryptsHelper.Decrypt(result, ProgramSetting.SecretKey);
+                    try
+                    {
+                        var reader = JsonConvert.DeserializeObject<RemoteCommand>(resp);
+                        if (reader != null)
+                        {
+                            return reader;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.WriteLog("服务端返回有误，可能是密钥不对:\n" + ex.ToString(), LogHelper.Log4NetLevel.Error);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Console.WriteLine(ex.ToString());
+#endif
+
+                LogHelper.WriteLog("连接API出现错误:" + ex.ToString(), LogHelper.Log4NetLevel.Error);
+            }
+
+
+
+            return null;
         }
     }
 }
