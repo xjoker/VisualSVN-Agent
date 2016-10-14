@@ -39,11 +39,16 @@ namespace VisualSVN_Agent.Model
 
     }
 
+
+    /// <summary>
+    /// 发送是否成功状态
+    /// </summary>
     public class JsonResponse
     {
         public string status { get; set; }
 
     }
+
 
     /// <summary>
     /// 删除repo时用到的属性
