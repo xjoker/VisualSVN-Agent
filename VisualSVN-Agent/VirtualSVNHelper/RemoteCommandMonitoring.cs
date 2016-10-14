@@ -11,7 +11,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
 {
     static class RemoteCommandMonitoring
     {
-        public static void CheckRemoteCommand(int timeInterval=10000)
+        public static void CheckRemoteCommand(int timeInterval = 10000)
         {
             Timer t = new Timer(timeInterval);
             t.Elapsed += new ElapsedEventHandler(TimingCheckAPI);
@@ -22,23 +22,40 @@ namespace VisualSVN_Agent.VirtualSVNHelper
         {
             string postJSON = "{\"Data\":{\"DataType\":\"requestCmd\"}}";
             var p = EncryptsAndDecryptsHelper.Encrypt(postJSON, ProgramSetting.SecretKey);
-            var returnCommand=WebFunctionHelper.GetCmd(p, ProgramSetting.APIurl + "/cmd");
+            var returnCommand = WebFunctionHelper.GetCmd(p, ProgramSetting.APIurl + "/cmd");
+
+
+            // 如果没有值则直接置空
+            returnCommand.name = returnCommand.name ?? "";
+            returnCommand.repoName = returnCommand.repoName ?? "";
+            returnCommand.groupName = returnCommand.groupName ?? "";
+            returnCommand.password = returnCommand.password ?? "";
+            returnCommand.permission = returnCommand.permission ?? 0;
+            returnCommand.message = returnCommand.message ?? "";
+            returnCommand.Folders = returnCommand.Folders ?? "";
 
             switch (returnCommand.commandType)
             {
                 case Model.CommandType.SetRepositoryPermission:
-                    VisualSVN_WMI_Api.SetRepositoryPermission(returnCommand.name, returnCommand.repoName,returnCommand.permission);
+                    if(returnCommand.permission>=0 || returnCommand.permission<=2)
+                    {
+                        VisualSVN_WMI_Api.SetRepositoryPermission(returnCommand.name, returnCommand.repoName, (int)returnCommand.permission);
+                    }
+                    else
+                    {
+                        VisualSVN_WMI_Api.SetRepositoryPermission(returnCommand.name, returnCommand.repoName);
+                    }
                     break;
                 case Model.CommandType.DelRepositoryPermission:
-                    VisualSVN_WMI_Api.DelRepositoryPermission(returnCommand.name,returnCommand.repoName);
+                    VisualSVN_WMI_Api.DelRepositoryPermission(returnCommand.name, returnCommand.repoName);
                     break;
                 case Model.CommandType.CreatGroup:
                     if (!string.IsNullOrEmpty(returnCommand.name) && !returnCommand.name.Contains(','))
                     {
                         // 单用户
-                        VisualSVN_WMI_Api.CreatGroup(returnCommand.groupName,new string[] { returnCommand.name });
+                        VisualSVN_WMI_Api.CreatGroup(returnCommand.groupName, new string[] { returnCommand.name });
                     }
-                    else if(!string.IsNullOrEmpty(returnCommand.name) && returnCommand.name.Contains(','))
+                    else if (!string.IsNullOrEmpty(returnCommand.name) && returnCommand.name.Contains(','))
                     {
                         // 多用户
                         string[] userArr = returnCommand.name.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);

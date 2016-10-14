@@ -38,6 +38,10 @@ namespace VisualSVN_Agent.utils
         /// <returns></returns>
         private static ManagementObject GetRepositoryObject(string repoName)
         {
+            if (string.IsNullOrEmpty(repoName))
+            {
+                return null;
+            }
             return new ManagementObject("root\\VisualSVN", string.Format("VisualSVN_Repository.Name='{0}'", repoName), null);
         }
 
@@ -50,8 +54,12 @@ namespace VisualSVN_Agent.utils
         public static IDictionary<string, AccessLevel> GetPermissions(string repositoryName, string path)
         {
             ManagementObject repository = GetRepositoryObject(repositoryName);
+            if (repository==null)
+            {
+                return null;
+            }
             ManagementBaseObject inParameters = repository.GetMethodParameters("GetSecurity");
-            inParameters["Path"] = path;
+            inParameters["Path"] = path ?? "/";
             ManagementBaseObject outParameters = repository.InvokeMethod("GetSecurity", inParameters, null);
 
             var permissions = new Dictionary<string, AccessLevel>();
@@ -155,12 +163,16 @@ namespace VisualSVN_Agent.utils
         private static void SetPermissions(string repositoryName, string path, IEnumerable<KeyValuePair<string, AccessLevel>> permissions)
         {
             ManagementObject repository = GetRepositoryObject(repositoryName);
-            ManagementBaseObject inParameters = repository.GetMethodParameters("SetSecurity");
-            inParameters["Path"] = path;
-            IEnumerable<ManagementObject> permissionObjects = permissions.Select(p => GetPermissionObject(p.Key, p.Value));
+            if (repository!=null)
+            {
+                ManagementBaseObject inParameters = repository.GetMethodParameters("SetSecurity");
+                inParameters["Path"] = path;
+                IEnumerable<ManagementObject> permissionObjects = permissions.Select(p => GetPermissionObject(p.Key, p.Value));
 
-            inParameters["Permissions"] = permissionObjects.ToArray();
-            repository.InvokeMethod("SetSecurity", inParameters, null);
+                inParameters["Permissions"] = permissionObjects.ToArray();
+                repository.InvokeMethod("SetSecurity", inParameters, null);
+            }
+           
         }
 
         /// <summary>

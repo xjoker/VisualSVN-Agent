@@ -67,7 +67,7 @@ namespace VisualSVN_Agent.Model
         /// <summary>
         /// SetRepositoryPermission permission
         /// </summary>
-        public int permission { get; set; }
+        public int? permission { get; set; }
 
 
         /// <summary>
