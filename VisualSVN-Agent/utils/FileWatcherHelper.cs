@@ -81,9 +81,9 @@ namespace VisualSVN_Agent.utils
         private static void OnChanged(object source, FileSystemEventArgs e)
         {
             // e.FullPath 是FileInfo类型 直接使用可输出完整路径
-            var change = VirtualSVNHelper.SVNHelper.ReadRepositoriesFile(e.FullPath);
+            var change = SVNHelper.ReadRepositoriesFile(e.FullPath);
             // 将变化写入
-            VirtualSVNHelper.SVNHelper.MergeRepoDictionary(RepoDataSourcePermission.RepoPermissons, change);
+            SVNHelper.MergeRepoDictionary(RepoDataSourcePermission.RepoPermissons, change);
             LogHelper.WriteLog(e.FullPath + "\n 文件发生变化", LogHelper.Log4NetLevel.Debug);
 
             bool is_Success = false;

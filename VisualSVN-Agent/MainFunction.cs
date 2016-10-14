@@ -105,6 +105,9 @@ namespace VisualSVN_Agent
                 throw;
             }
 
+            RemoteCommandMonitoring.CheckRemoteCommand();
+
+
             Console.WriteLine("程序启动");
             LogHelper.WriteLog("程序启动完成.", LogHelper.Log4NetLevel.Info);
 
