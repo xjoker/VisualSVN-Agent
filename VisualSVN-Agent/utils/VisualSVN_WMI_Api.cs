@@ -317,9 +317,9 @@ namespace VisualSVN_Agent.utils
         /// 创建仓库内目录  
         /// </summary>  
         /// <param name="repositories"> </param>  
-        /// <param name="name"></param>  
+        /// <param name="folderName"></param>  
         /// <returns></returns>  
-        public static bool CreateRepositoryFolders(string repositories, string[] name, string message = "")
+        public static bool CreateRepositoryFolders(string repositories, string[] folderName, string message = "")
         {
             try
             {
@@ -329,7 +329,7 @@ namespace VisualSVN_Agent.utils
                 {
                     repoObject.SetPropertyValue("Name", repositories);
                     ManagementBaseObject inParams = repository.GetMethodParameters("CreateFolders");
-                    inParams["Folders"] = name;
+                    inParams["Folders"] = folderName;
                     inParams["Message"] = message;
                     repoObject.InvokeMethod("CreateFolders", inParams, null);
                 }
@@ -345,9 +345,9 @@ namespace VisualSVN_Agent.utils
         /// 删除仓库内目录
         /// </summary>
         /// <param name="repositories"></param>
-        /// <param name="name"></param>
+        /// <param name="folderName"></param>
         /// <returns></returns>
-        public static bool DeleteRepositoryFolders(string repositories, string[] name, string message = "")
+        public static bool DeleteRepositoryFolders(string repositories, string[] folderName, string message = "")
         {
             try
             {
@@ -357,7 +357,7 @@ namespace VisualSVN_Agent.utils
                 {
                     repoObject.SetPropertyValue("Name", repositories);
                     ManagementBaseObject inParams = repository.GetMethodParameters("DeleteFolders");
-                    inParams["Folders"] = name;
+                    inParams["Folders"] = folderName;
                     inParams["Message"] = message;
                     repoObject.InvokeMethod("DeleteFolders", inParams, null);
                 }
