@@ -6,6 +6,11 @@
     "APIurl": "http://192.168.72.60:5000/svn_agent",
     "IV": "zxcvbnmdfrasdfgh",
     "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
+  },
+  "ID": "test",
+  "SVNAccount": {
+    "UserName": "",
+    "Password": ""
   }
 
 }

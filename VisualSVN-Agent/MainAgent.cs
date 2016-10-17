@@ -36,6 +36,9 @@ namespace VisualSVN_Agent
                 ProgramSetting.APIurl = responseJson.APIConfig.APIurl;
                 ProgramSetting.IV = responseJson.APIConfig.IV;
                 ProgramSetting.SecretKey = responseJson.APIConfig.SecretKey;
+                ProgramSetting.svnAccount = responseJson.SVNAccount.UserName;
+                ProgramSetting.svnPassword = responseJson.SVNAccount.Password;
+                ProgramSetting.mID = responseJson.ID;
                 LogHelper.WriteLog("配置读取完成！", LogHelper.Log4NetLevel.Info);
 #if DEBUG
                 MainFunction.MainRunFunction();

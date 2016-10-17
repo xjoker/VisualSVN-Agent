@@ -5,6 +5,7 @@ namespace VisualSVN_Agent.utils
     //程序的配置存储
     public static class ProgramSetting
     {
+        public static string  mID { get; set; }
         // VisualSVN软件仓库位置
         public static string Repositoriespath { get; set; }
         // 程序所在的路径
@@ -107,6 +108,8 @@ namespace VisualSVN_Agent.utils
     {
         public Repositories Repositories { get; set; }
         public APIConfig APIConfig { get; set; }
+        public string ID { get; set; }
+        public SVNAccount SVNAccount { get; set; }
     }
 
     /// <summary>
@@ -123,6 +126,15 @@ namespace VisualSVN_Agent.utils
         public string IV { get; set; }
         public string SecretKey { get; set; }
     }
+
+    public class SVNAccount
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+
+
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
 }

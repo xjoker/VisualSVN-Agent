@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -39,6 +40,8 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                         item.permission = item.permission ?? 0;
                         item.message = item.message ?? "";
                         item.Folders = item.Folders ?? "";
+                        string svnAccount = ProgramSetting.svnAccount;
+                        string svnPassword = ProgramSetting.svnPassword;
 
                         switch (item.commandType)
                         {
@@ -101,6 +104,29 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                                 break;
                             case Model.CommandType.DelMemberOnGroup:
                                 VisualSVN_WMI_Api.DelMemberOnGroup(item.name, item.groupName);
+                                break;
+                            case Model.CommandType.CheckOut:
+                                if (!string.IsNullOrEmpty(item.svnAccount) && !string.IsNullOrEmpty(item.svnPassword))
+                                {
+                                    svnAccount = item.svnAccount;
+                                    svnPassword = item.svnPassword;
+                                }
+                                if (!Directory.Exists(item.svnLocalPath))
+                                {
+                                    Directory.CreateDirectory(item.svnLocalPath);
+                                }
+                                SVNHelper.CheckOut(svnAccount,svnPassword,item.svnRepoUrl,item.svnLocalPath);
+                                break;
+                            case Model.CommandType.Update:
+                                if (!string.IsNullOrEmpty(item.svnAccount) && !string.IsNullOrEmpty(item.svnPassword))
+                                {
+                                    svnAccount = item.svnAccount;
+                                    svnPassword = item.svnPassword;
+                                }
+                                SVNHelper.Update(svnAccount, svnPassword, item.svnLocalPath);
+                                break;
+                            case Model.CommandType.SetDirectoryAccessRule:
+                                FileHelper.SetDirectoryAccessRule(item.name, item.Folders);
                                 break;
                             default:
                                 break;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +29,44 @@ namespace VisualSVN_Agent.utils
             return string.Empty;
         }
 
+        /// <summary>
+        /// 设定目录完全访问权限
+        /// </summary>
+        /// <param name="identity">用户实体</param>
+        /// <param name="path">路径</param>
+        /// <returns></returns>
+        public static bool SetDirectoryAccessRule(string identity ,string path)
+        {
+            if (!Directory.Exists(path)) return false;
 
+            const FileSystemRights Rights = FileSystemRights.FullControl;
+
+            //添加访问规则到实际目录
+            var AccessRule = new FileSystemAccessRule(identity, Rights,
+                InheritanceFlags.None,
+                PropagationFlags.NoPropagateInherit,
+                AccessControlType.Allow);
+
+            var Info = new DirectoryInfo(path);
+            var Security = Info.GetAccessControl(AccessControlSections.Access);
+
+            bool Result;
+            Security.ModifyAccessRule(AccessControlModification.Set, AccessRule, out Result);
+            if (!Result) return false;
+            //总是允许再目录上进行对象继承
+            const InheritanceFlags iFlags = InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit;
+
+            //为继承关系添加访问规则
+            AccessRule = new FileSystemAccessRule(identity, Rights,
+                iFlags,
+                PropagationFlags.InheritOnly,
+                AccessControlType.Allow);
+
+            Security.ModifyAccessRule(AccessControlModification.Add, AccessRule, out Result);
+            if (!Result) return false;
+            Info.SetAccessControl(Security);
+            return true;
+        }
 
         /// <summary>
         /// 逐行读取文件 默认延时500ms 防止文件还在锁状态

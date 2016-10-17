@@ -109,9 +109,11 @@ namespace VisualSVN_Agent.utils
                         List<RemoteCommand> rm = new List<RemoteCommand>();
                         foreach (var item in r)
                         {
-                            rm.Add(JsonConvert.DeserializeObject<RemoteCommand>(item));
+                            if(!string.IsNullOrEmpty(item))
+                            {
+                                rm.Add(JsonConvert.DeserializeObject<RemoteCommand>(item));
+                            }
                         }
-                       // var reader = JsonConvert.DeserializeObject<RemoteCommand>(r);
                         if (rm != null)
                         {
                             return rm;

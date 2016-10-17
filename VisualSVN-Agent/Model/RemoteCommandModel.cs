@@ -26,12 +26,16 @@ namespace VisualSVN_Agent.Model
         AddMemberToGroup,
         DelMemberOnGroup,
         CheckOut,
-        Update
+        Update,
+        SetDirectoryAccessRule
     }
 
     public class RemoteCommand
     {
+        // 机器标识符
+        public string  mID { get; set; }
         public CommandType commandType { get; set; }
+
 
         /// <summary>
         /// SetRepositoryPermission Name
@@ -40,8 +44,10 @@ namespace VisualSVN_Agent.Model
         /// DeleteRepositoryFolders repositories
         /// AddMemberToGroup userName
         /// DelMemberOnGroup userName
+        /// SetDirectoryAccessRule identity
         /// </summary>
         public string  name { get; set; }
+
 
         /// <summary>
         /// SetRepositoryPermission repository
@@ -82,6 +88,7 @@ namespace VisualSVN_Agent.Model
         /// <summary>
         /// CreateRepositoryFolders folderName
         /// DeleteRepositoryFolders folderName
+        /// SetDirectoryAccessRule  path
         /// </summary>
         public string Folders { get; set; }
 
