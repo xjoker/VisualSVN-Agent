@@ -16,6 +16,9 @@ namespace VisualSVN_Agent.utils
         // API 加密密钥
         public static string IV { get; set; }
         public static string SecretKey { get; set; }
+        public static string svnAccount { get; set; }
+
+        public static string svnPassword { get; set; }
     }
 
 

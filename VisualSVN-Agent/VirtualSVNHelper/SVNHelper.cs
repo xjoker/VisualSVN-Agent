@@ -1,4 +1,6 @@
 ﻿
+using SharpSvn;
+using SharpSvn.Security;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -261,6 +263,102 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                     first.Add(key, second[key]);
             }
             return first;
+        }
+
+        /// <summary>
+        /// SVN 检出
+        /// </summary>
+        /// <param name="svnUsername"></param>
+        /// <param name="svnPassword"></param>
+        /// <param name="url"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool CheckOut(string svnUsername,string svnPassword,string url,string path)
+        {
+            try
+            {
+                using (SvnClient client = new SvnClient())
+                {
+                    client.Authentication.UserNamePasswordHandlers +=
+                    new EventHandler<SvnUserNamePasswordEventArgs>(
+                        delegate (object s, SvnUserNamePasswordEventArgs e)
+                        {
+                            e.UserName = svnUsername;
+                            e.Password = svnPassword;
+                        });
+                    var c = client.CheckOut(new Uri(url), path);
+                    return c;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("SVN 检出错误:" + ex);
+                return false;
+            }
+
+        }
+
+        /// <summary>
+        /// SVN 更新
+        /// </summary>
+        /// <param name="svnUsername"></param>
+        /// <param name="svnPassword"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool Update(string svnUsername, string svnPassword,string path)
+        {
+            try
+            {
+                using (SvnClient client = new SvnClient())
+                {
+                    client.Authentication.UserNamePasswordHandlers +=
+                    new EventHandler<SvnUserNamePasswordEventArgs>(
+                        delegate (object s, SvnUserNamePasswordEventArgs e)
+                        {
+                            e.UserName = svnUsername;
+                            e.Password = svnPassword;
+                        });
+                    var c = client.Update(path);
+                    return c;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("SVN 更新错误"+ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 获取 SVN 本地路径信息
+        /// </summary>
+        /// <param name="svnUsername"></param>
+        /// <param name="svnPassword"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static SvnInfoEventArgs Info(string svnUsername, string svnPassword, string path)
+        {
+            try
+            {
+                using (SvnClient client = new SvnClient())
+                {
+                    client.Authentication.UserNamePasswordHandlers +=
+                    new EventHandler<SvnUserNamePasswordEventArgs>(
+                        delegate (object s, SvnUserNamePasswordEventArgs e)
+                        {
+                            e.UserName = svnUsername;
+                            e.Password = svnPassword;
+                        });
+                    SvnInfoEventArgs info;
+                    var c = client.GetInfo(new SvnPathTarget(path), out info);
+                    return info;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("SVN 获取信息错误" + ex);
+                return null;
+            }
         }
 
     }
