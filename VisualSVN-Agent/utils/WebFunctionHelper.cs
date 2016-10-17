@@ -82,7 +82,7 @@ namespace VisualSVN_Agent.utils
         /// <param name="jsonTxt">传入 Json 文本</param>
         /// <param name="url">API 地址</param>
         /// <returns>返回值</returns>
-        public static RemoteCommand GetCmd(string jsonTxt, string url)
+        public static List<RemoteCommand> GetCmd(string jsonTxt, string url)
         {
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ContentType = "application/json";
@@ -105,10 +105,16 @@ namespace VisualSVN_Agent.utils
                     var resp = EncryptsAndDecryptsHelper.Decrypt(result, ProgramSetting.SecretKey);
                     try
                     {
-                        var reader = JsonConvert.DeserializeObject<RemoteCommand>(resp);
-                        if (reader != null)
+                        string[] r = resp.Split(',');
+                        List<RemoteCommand> rm = new List<RemoteCommand>();
+                        foreach (var item in r)
                         {
-                            return reader;
+                            rm.Add(JsonConvert.DeserializeObject<RemoteCommand>(item));
+                        }
+                       // var reader = JsonConvert.DeserializeObject<RemoteCommand>(r);
+                        if (rm != null)
+                        {
+                            return rm;
                         }
                     }
                     catch (Exception ex)

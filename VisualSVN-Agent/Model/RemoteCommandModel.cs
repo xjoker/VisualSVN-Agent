@@ -14,7 +14,8 @@ namespace VisualSVN_Agent.Model
 
     public enum CommandType
     {
-        SetRepositoryPermission = 0,
+        NoCommand = 0,
+        SetRepositoryPermission,
         DelRepositoryPermission,
         CreatGroup,
         CreateUser,
@@ -23,7 +24,9 @@ namespace VisualSVN_Agent.Model
         CreateRepositoryFolders,
         DeleteRepositoryFolders,
         AddMemberToGroup,
-        DelMemberOnGroup
+        DelMemberOnGroup,
+        CheckOut,
+        Update
     }
 
     public class RemoteCommand
@@ -82,5 +85,9 @@ namespace VisualSVN_Agent.Model
         /// </summary>
         public string Folders { get; set; }
 
+        public string svnAccount { get; set; }
+        public string svnPassword { get; set; }
+        public string  svnRepoUrl { get; set; }
+        public string  svnLocalPath { get; set; }
     }
 }
