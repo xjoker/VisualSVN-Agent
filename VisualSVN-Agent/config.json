@@ -1,16 +1,17 @@
 ﻿{
   "Repositories": {
-    "path": "C:\\Repositories"
+    "path": "C:\\Repositories",
+    "SitePrefix": "https://salt-minion-2008-2/svn/"
   },
   "APIConfig": {
     "APIurl": "http://192.168.72.60:5000/svn_agent",
     "IV": "zxcvbnmdfrasdfgh",
     "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
   },
-  "ID": "test",
+  "ID": "192.168.72.68",
   "SVNAccount": {
-    "UserName": "",
-    "Password": ""
+    "UserName": "admin",
+    "Password": "admin"
   }
 
 }

@@ -105,7 +105,8 @@ namespace VisualSVN_Agent.utils
                     var resp = EncryptsAndDecryptsHelper.Decrypt(result, ProgramSetting.SecretKey);
                     try
                     {
-                        string[] r = resp.Split(',');
+                        string[] r = resp.Split('|');
+
                         List<RemoteCommand> rm = new List<RemoteCommand>();
                         foreach (var item in r)
                         {

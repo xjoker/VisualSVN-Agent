@@ -21,7 +21,8 @@ namespace VisualSVN_Agent.VirtualSVNHelper
 
         public static void TimingCheckAPI(object source, ElapsedEventArgs e)
         {
-            string postJSON = "{\"Data\":{\"DataType\":\"requestCmd\"}}";
+            // https://xJoker-Office-PC:8443/svn/t/
+            string postJSON = "{\"Data\":{\"DataType\":\"requestCmd\",\"SVNPrefix\":\""+ ProgramSetting.SitePrefix + "\",\"mID\":\""+ ProgramSetting.mID + "\"}}";
             var p = EncryptsAndDecryptsHelper.Encrypt(postJSON, ProgramSetting.SecretKey);
             var returnCommand = WebFunctionHelper.GetCmd(p, ProgramSetting.APIurl + "/cmd");
 

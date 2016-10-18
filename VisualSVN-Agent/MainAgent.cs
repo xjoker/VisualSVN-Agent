@@ -39,10 +39,13 @@ namespace VisualSVN_Agent
                 ProgramSetting.svnAccount = responseJson.SVNAccount.UserName;
                 ProgramSetting.svnPassword = responseJson.SVNAccount.Password;
                 ProgramSetting.mID = responseJson.ID;
+                ProgramSetting.SitePrefix = responseJson.Repositories.SitePrefix;
                 LogHelper.WriteLog("配置读取完成！", LogHelper.Log4NetLevel.Info);
 #if DEBUG
+                LogHelper.WriteLog("Debug 模式启动");
                 MainFunction.MainRunFunction();
 #else
+                LogHelper.WriteLog("Release 模式启动");
                 mainThread.Start();
 #endif
                 
