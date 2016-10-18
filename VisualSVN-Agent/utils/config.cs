@@ -20,6 +20,7 @@ namespace VisualSVN_Agent.utils
         public static string svnAccount { get; set; }
 
         public static string svnPassword { get; set; }
+        public static string SitePrefix { get; set; }
     }
 
 
@@ -118,6 +119,7 @@ namespace VisualSVN_Agent.utils
     public class Repositories
     {
         public string path { get; set; }
+        public string SitePrefix { get; set; }
     }
 
     public class APIConfig
