@@ -107,7 +107,15 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                                 {
                                     if (g.Value.Contains(line[0]))
                                     {
-                                        hp.userGroup = g.Key;
+                                        if (string.IsNullOrEmpty(hp.userGroup))
+                                        {
+                                            hp.userGroup = g.Key;
+                                        }
+                                        else
+                                        {
+                                            hp.userGroup = hp.userGroup + "," + g.Key;
+                                        }
+                                        
                                     }
                                 }
 
@@ -202,7 +210,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                             if (userAndPermissions[0].StartsWith("@"))
                             {
                                 rapd.IsGroup = true;
-                                Username = Username.Substring(Username.IndexOf("@") + 1);
+                                Username = Username.Replace("@", "##");
                             }
 
                             rap.Permission.Add(Username, rapd);
@@ -223,6 +231,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
             catch (Exception ex)
             {
                 LogHelper.WriteLog(ex.StackTrace);
+                LogHelper.WriteLog("读取仓库权限出现异常 可能是SVN详细设定的目录权限导致");
                 return null;
             }
         }
