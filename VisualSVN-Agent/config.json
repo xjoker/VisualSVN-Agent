@@ -4,7 +4,8 @@
     "SitePrefix": "https://salt-minion-2008-2/svn/"
   },
   "APIConfig": {
-    "APIurl": "http://192.168.72.60:5000/svn_agent",
+    "APIurl": "http://localhost:12980/Services/SVNAccount.asmx/svn_agent",
+    "CMDurl": "http://localhost:12980/Services/SVNAccount.asmx/cmd",
     "IV": "zxcvbnmdfrasdfgh",
     "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
   },

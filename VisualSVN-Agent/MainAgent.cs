@@ -34,6 +34,7 @@ namespace VisualSVN_Agent
                 var responseJson=JsonConvert.DeserializeObject<RootObject>(response);
                 ProgramSetting.Repositoriespath = responseJson.Repositories.path;
                 ProgramSetting.APIurl = responseJson.APIConfig.APIurl;
+                ProgramSetting.CMDurl = responseJson.APIConfig.CMDurl;
                 ProgramSetting.IV = responseJson.APIConfig.IV;
                 ProgramSetting.SecretKey = responseJson.APIConfig.SecretKey;
                 ProgramSetting.svnAccount = responseJson.SVNAccount.UserName;

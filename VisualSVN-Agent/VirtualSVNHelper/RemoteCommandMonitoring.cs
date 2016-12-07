@@ -24,7 +24,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
             // https://xJoker-Office-PC:8443/svn/t/
             string postJSON = "{\"Data\":{\"DataType\":\"requestCmd\",\"SVNPrefix\":\""+ ProgramSetting.SitePrefix + "\",\"mID\":\""+ ProgramSetting.mID + "\"}}";
             var p = EncryptsAndDecryptsHelper.Encrypt(postJSON, ProgramSetting.SecretKey);
-            var returnCommand = WebFunctionHelper.GetCmd(p, ProgramSetting.APIurl + "/cmd");
+            var returnCommand = WebFunctionHelper.GetCmd(p, ProgramSetting.CMDurl);
 
             if (returnCommand!=null)
             {
