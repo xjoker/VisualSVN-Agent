@@ -107,16 +107,16 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                                 VisualSVN_WMI_Api.DelMemberOnGroup(item.name, item.groupName);
                                 break;
                             case Model.CommandType.CheckOut:
+                                
                                 if (!string.IsNullOrEmpty(item.svnAccount) && !string.IsNullOrEmpty(item.svnPassword))
                                 {
                                     svnAccount = item.svnAccount;
                                     svnPassword = item.svnPassword;
                                 }
-                                if (!Directory.Exists(item.svnLocalPath))
+                                if (!SVNHelper.CheckOut(svnAccount, svnPassword, item.svnRepoUrl, item.svnLocalPath))
                                 {
-                                    Directory.CreateDirectory(item.svnLocalPath);
+                                    LogHelper.WriteLog("SVN检出错误！",LogHelper.Log4NetLevel.Error);
                                 }
-                                SVNHelper.CheckOut(svnAccount,svnPassword,item.svnRepoUrl,item.svnLocalPath);
                                 break;
                             case Model.CommandType.Update:
                                 if (!string.IsNullOrEmpty(item.svnAccount) && !string.IsNullOrEmpty(item.svnPassword))

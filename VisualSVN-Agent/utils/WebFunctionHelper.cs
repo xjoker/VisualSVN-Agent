@@ -103,6 +103,7 @@ namespace VisualSVN_Agent.utils
                 {
                     var result = streamReader.ReadToEnd();
                     var resp = EncryptsAndDecryptsHelper.Decrypt(result, ProgramSetting.SecretKey);
+                    LogHelper.WriteLog(resp);
                     try
                     {
                         string[] r = resp.Split('|');
