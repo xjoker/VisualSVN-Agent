@@ -91,7 +91,7 @@ namespace VisualSVN_Agent.utils
             {
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
-                    string postJSON = "{\"Data\":\"" + jsonTxt + "\"}";
+                    string postJSON = $"{{\"Data\":\"{jsonTxt}\"}}";
                     streamWriter.Write(postJSON);
                     streamWriter.Flush();
                     streamWriter.Close();

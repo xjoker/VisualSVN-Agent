@@ -149,7 +149,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
             {
                 var pd = htpasswdUserAndPassword.UsersTable[username];
                 var result = UnixMd5CryptTool.crypt(password, pd.salt, pd.cryptMode);
-                if (result == ("$" + pd.cryptMode + "$" + pd.salt + "$" + pd.passwordHash))
+                if (result == ($"${pd.cryptMode}${pd.salt}${pd.passwordHash}"))
                 {
                     return true;
                 }
@@ -293,7 +293,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                 startInfo.FileName = "svn.exe";
                 startInfo.CreateNoWindow = true;
                 startInfo.UseShellExecute = false;
-                startInfo.Arguments = string.Format("checkout {0} {1} --username {2} --password {3}", url, path, svnUsername, svnPassword); 
+                startInfo.Arguments = $"checkout {url} {path} --username {svnUsername} --password {svnPassword}";
 
                 proc.StartInfo = startInfo;
                 if (proc.Start())
@@ -328,7 +328,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                 startInfo.FileName = "svn.exe";
                 startInfo.CreateNoWindow = true;
                 startInfo.UseShellExecute = false;
-                startInfo.Arguments = string.Format("up  --username {0} --password {1} {2}", svnUsername, svnPassword, path);
+                startInfo.Arguments = $"up  --username {svnUsername} --password {svnPassword} {path}";
 
                 proc.StartInfo = startInfo;
                 if (proc.Start())
