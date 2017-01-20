@@ -31,7 +31,7 @@ namespace VisualSVN_Agent.Model
             }
             set
             {
-                this.time = value;
+                this.time = value;                                                                              
             }
         }
         public string DataType { get; set; }

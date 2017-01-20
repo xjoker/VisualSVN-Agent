@@ -22,7 +22,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
         public static void TimingCheckAPI(object source, ElapsedEventArgs e)
         {
             // https://xJoker-Office-PC:8443/svn/t/
-            string postJSON = $"{{\"Data\":{{\"DataType\":\"requestCmd\",\"SVNPrefix\":\"{ProgramSetting.SitePrefix }\",\"mID\":\"{ProgramSetting.mID}\"}}";
+            string postJSON = $"{{\"Data\":{{\"DataType\":\"requestCmd\",\"SVNPrefix\":\"{ProgramSetting.SitePrefix }\",\"mID\":\"{ProgramSetting.mID}\"}}}}";
             var p = EncryptsAndDecryptsHelper.Encrypt(postJSON, ProgramSetting.SecretKey);
             var returnCommand = WebFunctionHelper.GetCmd(p, ProgramSetting.CMDurl);
 
@@ -128,6 +128,14 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                                 break;
                             case Model.CommandType.SetDirectoryAccessRule:
                                 FileHelper.SetDirectoryAccessRule(item.name, item.Folders);
+                                break;
+                            case Model.CommandType.SetDirectoryShare:
+                                // 创建共享目录
+                                if (!Taxi.FileHelper.FileHelper.DirectoryExists(item.svnLocalPath))
+                                {
+                                    Taxi.FileHelper.FileHelper.CreateDirectory(item.svnLocalPath);
+                                }
+                                Taxi.Network.WindowsShareFolder.ShareFolder(item.svnLocalPath, item.Folders, item.Folders);
                                 break;
                             default:
                                 break;

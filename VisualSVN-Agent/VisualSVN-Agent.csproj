@@ -81,6 +81,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
+    <Reference Include="Taxi">
+      <HintPath>..\..\Taxi\Taxi\bin\Release\Taxi.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainAgent.cs">

@@ -27,7 +27,8 @@ namespace VisualSVN_Agent.Model
         DelMemberOnGroup,
         CheckOut,
         Update,
-        SetDirectoryAccessRule
+        SetDirectoryAccessRule,
+        SetDirectoryShare
     }
 
     public class RemoteCommand
