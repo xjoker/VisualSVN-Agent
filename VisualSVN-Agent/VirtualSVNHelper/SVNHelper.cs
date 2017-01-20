@@ -84,7 +84,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
             {
                 // 按行读取文件，确认文件至少药有一行
                 var passwdFile = FileHelper.ReadFileForLines(SVNGroupConfigPath);
-                if (passwdFile.Count > 1)
+                if (passwdFile.Count >= 1)
                 {
                     foreach (var item in passwdFile)
                     {
@@ -102,24 +102,26 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                                 hp.salt = pw[1];
                                 hp.passwordHash = pw[2];
 
-                                foreach (var g in groupList.userGroup)
+                                if (groupList.userGroup!=null)
                                 {
-                                    if (g.Value.Contains(line[0]))
+                                    foreach (var g in groupList.userGroup)
                                     {
-                                        if (string.IsNullOrEmpty(hp.userGroup))
+                                        if (g.Value.Contains(line[0]))
                                         {
-                                            hp.userGroup = g.Key;
+                                            if (string.IsNullOrEmpty(hp.userGroup))
+                                            {
+                                                hp.userGroup = g.Key;
+                                            }
+                                            else
+                                            {
+                                                hp.userGroup = hp.userGroup + "," + g.Key;
+                                            }
+
                                         }
-                                        else
-                                        {
-                                            hp.userGroup = hp.userGroup + "," + g.Key;
-                                        }
-                                        
                                     }
                                 }
 
-
-
+                                
                                 htpasswdUserAndPassword.UsersTable.Add(line[0], hp);
                             }
                         }
