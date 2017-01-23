@@ -295,7 +295,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                 startInfo.FileName = "svn.exe";
                 startInfo.CreateNoWindow = true;
                 startInfo.UseShellExecute = false;
-                startInfo.Arguments = $"checkout {url} {path} --username {svnUsername} --password {svnPassword}";
+                startInfo.Arguments = $"  --trust-server-cert --non-interactive checkout {url} {path} --username {svnUsername} --password {svnPassword}";
 
                 proc.StartInfo = startInfo;
                 if (proc.Start())
@@ -330,7 +330,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                 startInfo.FileName = "svn.exe";
                 startInfo.CreateNoWindow = true;
                 startInfo.UseShellExecute = false;
-                startInfo.Arguments = $"up  --username {svnUsername} --password {svnPassword} {path}";
+                startInfo.Arguments = $" --trust-server-cert --non-interactive up  --username {svnUsername} --password {svnPassword} {path}";
 
                 proc.StartInfo = startInfo;
                 if (proc.Start())

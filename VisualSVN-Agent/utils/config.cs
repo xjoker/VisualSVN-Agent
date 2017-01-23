@@ -23,6 +23,7 @@ namespace VisualSVN_Agent.utils
 
         public static string svnPassword { get; set; }
         public static string SitePrefix { get; set; }
+        public static string WindowsShareUsername { get; set; }
     }
 
 
@@ -113,6 +114,7 @@ namespace VisualSVN_Agent.utils
         public APIConfig APIConfig { get; set; }
         public string ID { get; set; }
         public SVNAccount SVNAccount { get; set; }
+        public string WindowsShareUsername { get; set; }
     }
 
     /// <summary>

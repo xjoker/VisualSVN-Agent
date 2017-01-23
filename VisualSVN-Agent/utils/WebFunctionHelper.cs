@@ -103,28 +103,34 @@ namespace VisualSVN_Agent.utils
                 {
                     var result = streamReader.ReadToEnd();
                     var resp = EncryptsAndDecryptsHelper.Decrypt(result, ProgramSetting.SecretKey);
-                    LogHelper.WriteLog(resp);
-                    try
-                    {
-                        string[] r = resp.Split('|');
 
-                        List<RemoteCommand> rm = new List<RemoteCommand>();
-                        foreach (var item in r)
+                    if (resp!= "{'CommandType':'NoCommand'}")
+                    {
+                        LogHelper.WriteLog(resp);
+                        try
                         {
-                            if(!string.IsNullOrEmpty(item))
+                            string[] r = resp.Split('|');
+
+                            List<RemoteCommand> rm = new List<RemoteCommand>();
+                            foreach (var item in r)
                             {
-                                rm.Add(JsonConvert.DeserializeObject<RemoteCommand>(item));
+                                if (!string.IsNullOrEmpty(item))
+                                {
+                                    rm.Add(JsonConvert.DeserializeObject<RemoteCommand>(item));
+                                }
+                            }
+                            if (rm != null)
+                            {
+                                return rm;
                             }
                         }
-                        if (rm != null)
+                        catch (Exception ex)
                         {
-                            return rm;
+                            LogHelper.WriteLog("服务端返回有误，可能是密钥不对:\n" + ex.ToString(), LogHelper.Log4NetLevel.Error);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        LogHelper.WriteLog("服务端返回有误，可能是密钥不对:\n" + ex.ToString(), LogHelper.Log4NetLevel.Error);
-                    }
+                    
+                    
 
                 }
             }

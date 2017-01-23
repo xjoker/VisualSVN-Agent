@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                 {
                     if (item.commandType != 0)
                     {
-
+                        LogHelper.WriteLog(item.commandType.ToString());
                         // 如果没有值则直接置空
                         item.name = item.name ?? "";
                         item.repoName = item.repoName ?? "";
@@ -135,7 +136,9 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                                 {
                                     Taxi.FileHelper.FileHelper.CreateDirectory(item.svnLocalPath);
                                 }
-                                Taxi.Network.WindowsShareFolder.ShareFolder(item.svnLocalPath, item.Folders, item.Folders);
+
+                                var acl = new Taxi.Network.Win32_Ace().SecurityDescriptor(ProgramSetting.WindowsShareUsername,ACL:Taxi.Network.Win32ShareType.ShareAccessMask.read);
+                                Taxi.Network.WindowsShareFolder.ShareFolder(item.svnLocalPath, item.Folders, item.Folders,acl);
                                 break;
                             default:
                                 break;

@@ -3,6 +3,7 @@
     "path": "C:\\Repositories",
     "SitePrefix": "https://salt-minion-2008-2/svn/"
   },
+  "WindowsShareUsername": "",
   "APIConfig": {
     "APIurl": "http://192.168.74.1/Services/SVNAccount.asmx/svn_agent",
     "CMDurl": "http://192.168.74.1/Services/SVNAccount.asmx/cmd",
