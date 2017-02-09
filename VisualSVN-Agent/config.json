@@ -1,19 +1,19 @@
 ﻿{
   "Repositories": {
-    "path": "C:\\Repositories",
-    "SitePrefix": "https://salt-minion-2008-2/svn/"
+    "path": "D:\\SVN",
+    "SitePrefix": "https://site.fzcyjh.com/svn/"
   },
-  "WindowsShareUsername": "",
+  "WindowsShareUsername": "Kevinkern",
   "APIConfig": {
-    "APIurl": "http://192.168.74.1/Services/SVNAccount.asmx/svn_agent",
-    "CMDurl": "http://192.168.74.1/Services/SVNAccount.asmx/cmd",
+    "APIurl": "http://www.Aquarius.com/Services/SVNAccount.asmx/svn_agent",
+    "CMDurl": "http://www.Aquarius.com/Services/SVNAccount.asmx/cmd",
     "IV": "zxcvbnmdfrasdfgh",
     "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
   },
-  "ID": "192.168.72.68",
+  "ID": "Center",
   "SVNAccount": {
-    "UserName": "admin",
-    "Password": "admin"
+    "UserName": "Kevin",
+    "Password": "JdyouSVN"
   }
 
 }

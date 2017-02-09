@@ -21,8 +21,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_57DEA3F09AC34791B15CAE740AB7705C"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_266A9636EB8129746303D5AD0C347B65"
+        "OwnerKey" = "8:_BD9FC087D80F43C0A76BC02E7A9CDA8D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -35,6 +35,12 @@
         {
         "MsmKey" = "8:_65C3F8911EB0D823C31D41539BB6CCDA"
         "OwnerKey" = "8:_BD9FC087D80F43C0A76BC02E7A9CDA8D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7E8EF1D392DC42058732D56EC96EDCD6"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -65,6 +71,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_65C3F8911EB0D823C31D41539BB6CCDA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_266A9636EB8129746303D5AD0C347B65"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -227,10 +239,21 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_57DEA3F09AC34791B15CAE740AB7705C"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_266A9636EB8129746303D5AD0C347B65"
             {
-            "SourcePath" = "8:..\\VisualSVN-Agent\\config.json"
-            "TargetName" = "8:config.json"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Taxi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_266A9636EB8129746303D5AD0C347B65"
+                    {
+                    "Name" = "8:Taxi.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Taxi.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_9E5F1B5DA7554017B62960BB1FAAE501"
             "Condition" = "8:"
@@ -244,7 +267,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6526AF22DEE0E8CB0FD2383F053E322A"
@@ -307,6 +330,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7E8EF1D392DC42058732D56EC96EDCD6"
+            {
+            "SourcePath" = "8:..\\VisualSVN-Agent\\config.json"
+            "TargetName" = "8:config.json"
+            "Tag" = "8:"
+            "Folder" = "8:_9E5F1B5DA7554017B62960BB1FAAE501"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EE319C36768944DD8FAB4603C929FACB"
@@ -386,7 +429,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:VisualSVN-Agent"
         "ProductCode" = "8:{E4DA91BA-5376-4C62-A723-1D453899D535}"
-        "PackageCode" = "8:{B9FD9511-D4BB-4D59-900E-F204EA1A122A}"
+        "PackageCode" = "8:{6A214F96-BABD-42BF-87F0-5F7EE05F2E6E}"
         "UpgradeCode" = "8:{6169ACB7-3959-4F42-A48F-DF77DBDBACA2}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

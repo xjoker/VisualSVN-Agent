@@ -287,7 +287,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
         {
             try
             {
-
+                string repo = "";
                 Process proc = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.RedirectStandardOutput = true;
@@ -295,12 +295,14 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                 startInfo.FileName = "svn.exe";
                 startInfo.CreateNoWindow = true;
                 startInfo.UseShellExecute = false;
-                startInfo.Arguments = $"  --trust-server-cert --non-interactive checkout {url} {path} --username {svnUsername} --password {svnPassword}";
+                startInfo.Arguments = $"--trust-server-cert --non-interactive checkout {url} {path} --username {svnUsername} --password {svnPassword}";
 
                 proc.StartInfo = startInfo;
                 if (proc.Start())
                 {
                     proc.WaitForExit();
+                    repo = proc.StandardOutput.ReadToEnd();
+                    LogHelper.WriteLog(repo);
                 }
                 return true;
             }
@@ -330,7 +332,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                 startInfo.FileName = "svn.exe";
                 startInfo.CreateNoWindow = true;
                 startInfo.UseShellExecute = false;
-                startInfo.Arguments = $" --trust-server-cert --non-interactive up  --username {svnUsername} --password {svnPassword} {path}";
+                startInfo.Arguments = $"--trust-server-cert --non-interactive up  --username {svnUsername} --password {svnPassword} {path}";
 
                 proc.StartInfo = startInfo;
                 if (proc.Start())

@@ -137,7 +137,7 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                                     Taxi.FileHelper.FileHelper.CreateDirectory(item.svnLocalPath);
                                 }
 
-                                var acl = new Taxi.Network.Win32_Ace().SecurityDescriptor(ProgramSetting.WindowsShareUsername,ACL:Taxi.Network.Win32ShareType.ShareAccessMask.read);
+                                var acl = new Taxi.Network.Win32_Ace().SecurityDescriptor(ProgramSetting.WindowsShareUsername,ACL:Taxi.Network.Win32ShareType.ShareAccessMask.Read);
                                 Taxi.Network.WindowsShareFolder.ShareFolder(item.svnLocalPath, item.Folders, item.Folders,acl);
                                 break;
                             default:
