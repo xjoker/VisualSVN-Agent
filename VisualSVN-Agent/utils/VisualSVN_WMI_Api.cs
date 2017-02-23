@@ -18,6 +18,23 @@ namespace VisualSVN_Agent.utils
         }
 
         /// <summary>
+        /// Hooks Type 类型
+        /// </summary>
+        public enum HooksType : uint
+        {
+            PostCommit =0,
+            PostLock =1,
+            PostRevpropChange =2,
+            PostUnlock =3,
+            PreCommit =4,
+            PreLock =5,
+            PreRevpropChange =6,
+            PreUnlock =7,
+            StartCommit =8
+        }
+
+
+        /// <summary>
         /// 检测 VisualSVN 的WMI是否可用
         /// </summary>
         /// <returns></returns>
@@ -486,6 +503,32 @@ namespace VisualSVN_Agent.utils
             }
 
             return Member;
+        }
+
+
+        /// <summary>
+        /// 设置仓库的 Hooks 信息
+        /// </summary>
+        /// <param name="RepoName"></param>
+        /// <param name="Content"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool SetRepoHooks(string RepoName,string Content, HooksType type)
+        {
+            try
+            {
+                ManagementClass svnHookClass = new ManagementClass("root\\VisualSVN", "PS_SvnRepositoryHook", null);
+                ManagementBaseObject @params = svnHookClass.GetMethodParameters("AddByRepositoryName");
+                @params["Content"] = Content;
+                @params["Repository"] = RepoName;
+                @params["Type"] = type;
+                svnHookClass.InvokeMethod("AddByRepositoryName", @params, null);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

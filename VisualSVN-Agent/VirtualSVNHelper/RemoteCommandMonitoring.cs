@@ -140,6 +140,13 @@ namespace VisualSVN_Agent.VirtualSVNHelper
                                 var acl = new Taxi.Network.Win32_Ace().SecurityDescriptor(ProgramSetting.WindowsShareUsername,ACL:Taxi.Network.Win32ShareType.ShareAccessMask.Read);
                                 Taxi.Network.WindowsShareFolder.ShareFolder(item.svnLocalPath, item.Folders, item.Folders,acl);
                                 break;
+                            case Model.CommandType.AddHooks:
+                                // 配置hook文件
+                                if (!VisualSVN_WMI_Api.SetRepoHooks(item.repoName, item.repoName, (VisualSVN_WMI_Api.HooksType)item.permission))
+                                {
+                                    LogHelper.WriteLog("SVN设定Hooks错误！", LogHelper.Log4NetLevel.Error);
+                                }
+                                break;
                             default:
                                 break;
                         }

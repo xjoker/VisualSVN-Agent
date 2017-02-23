@@ -28,7 +28,8 @@ namespace VisualSVN_Agent.Model
         CheckOut,
         Update,
         SetDirectoryAccessRule,
-        SetDirectoryShare
+        SetDirectoryShare,
+        AddHooks
     }
 
     public class RemoteCommand
@@ -76,6 +77,7 @@ namespace VisualSVN_Agent.Model
 
         /// <summary>
         /// SetRepositoryPermission permission
+        /// SetDirectoryAccessRule type
         /// </summary>
         public int? permission { get; set; }
 
@@ -83,6 +85,7 @@ namespace VisualSVN_Agent.Model
         /// <summary>
         /// CreateRepositoryFolders message 
         /// DeleteRepositoryFolders message
+        /// PS_SvnRepositoryHook Content
         /// </summary>
         public string message { get; set; }
 
