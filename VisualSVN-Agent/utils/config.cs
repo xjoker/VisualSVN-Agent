@@ -5,20 +5,16 @@ namespace VisualSVN_Agent.utils
     //程序的配置存储
     public static class ProgramSetting
     {
-        public static string  mID { get; set; }
+        public static string mID { get; set; }
         // VisualSVN软件仓库位置
         public static string Repositoriespath { get; set; }
         // 程序所在的路径
         public static string ProgramInPath { get; set; }
         // 配置文件位置
         public static string ConfigFilePath { get; set; }
-        // API地址
-        public static string APIurl { get; set; }
-        // cmd地址
-        public static string CMDurl { get; set; }
-        // API 加密密钥
-        public static string IV { get; set; }
-        public static string SecretKey { get; set; }
+
+        public static List<APIConfigType> APIConfig { get; set; }
+
         public static string svnAccount { get; set; }
 
         public static string svnPassword { get; set; }
@@ -26,6 +22,18 @@ namespace VisualSVN_Agent.utils
         public static string WindowsShareUsername { get; set; }
     }
 
+
+
+    public class APIConfigType
+    {
+        // API地址
+        public string APIurl { get; set; }
+        // cmd地址
+        public string CMDurl { get; set; }
+        // API 加密密钥
+        public string IV { get; set; }
+        public string SecretKey { get; set; }
+    }
 
 
     /// <summary>
@@ -111,7 +119,7 @@ namespace VisualSVN_Agent.utils
     public class RootObject
     {
         public Repositories Repositories { get; set; }
-        public APIConfig APIConfig { get; set; }
+        public List<APIConfigType> APIConfig { get; set; }
         public string ID { get; set; }
         public SVNAccount SVNAccount { get; set; }
         public string WindowsShareUsername { get; set; }
@@ -126,13 +134,6 @@ namespace VisualSVN_Agent.utils
         public string SitePrefix { get; set; }
     }
 
-    public class APIConfig
-    {
-        public string APIurl { get; set; }
-        public string CMDurl { get; set; }
-        public string IV { get; set; }
-        public string SecretKey { get; set; }
-    }
 
     public class SVNAccount
     {

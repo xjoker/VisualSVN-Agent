@@ -86,33 +86,38 @@ namespace VisualSVN_Agent.utils
             SVNHelper.MergeRepoDictionary(RepoDataSourcePermission.RepoPermissons, change);
             LogHelper.WriteLog(e.FullPath + "\n 文件发生变化", LogHelper.Log4NetLevel.Debug);
 
-            bool is_Success = false;
-            int reTryCount = 3;
-            if (is_Success == false && reTryCount > 0)
+            foreach (var item in ProgramSetting.APIConfig)
             {
 
-                // 加密发送消息
-                JsonPostModel jpm = new JsonPostModel();
-                jpm.Agent = JsonPostModelAgent.Client.ToString();
-                jpm.DataType = JsonPostModelDataType.ChangeRepo.ToString();
-                jpm.Data = change;
-                is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), ProgramSetting.SecretKey), ProgramSetting.APIurl);
-                if (is_Success)
+                bool is_Success = false;
+                int reTryCount = 3;
+                if (is_Success == false && reTryCount > 0)
                 {
-                    is_Success = true;
+
+                    // 加密发送消息
+                    JsonPostModel jpm = new JsonPostModel();
+                    jpm.Agent = JsonPostModelAgent.Client.ToString();
+                    jpm.DataType = JsonPostModelDataType.ChangeRepo.ToString();
+                    jpm.Data = change;
+                    is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), item.SecretKey,item.IV), item.APIurl, item.SecretKey, item.IV);
+                    if (is_Success)
+                    {
+                        is_Success = true;
+                    }
+                    else
+                    {
+                        LogHelper.WriteLog("发送Repo更新信息出现错误", LogHelper.Log4NetLevel.Error);
+                        reTryCount--;
+                        Thread.Sleep(3000);
+                    }
+
                 }
                 else
                 {
-                    LogHelper.WriteLog("发送Repo更新信息出现错误", LogHelper.Log4NetLevel.Error);
-                    reTryCount--;
-                    Thread.Sleep(3000);
+                    LogHelper.WriteLog("发送Repo更新信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
                 }
+            }
 
-            }
-            else
-            {
-                LogHelper.WriteLog("发送Repo更新信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
-            }
 
         }
 
@@ -127,37 +132,38 @@ namespace VisualSVN_Agent.utils
                 RepoDataSourcePermission.RepoPermissons.Remove(dirName);
                 LogHelper.WriteLog(e.FullPath + "\n repo 被删除", LogHelper.Log4NetLevel.Debug);
 
-                bool is_Success = false;
-                int reTryCount = 3;
-                if (is_Success == false && reTryCount > 0)
+                foreach (var item in ProgramSetting.APIConfig)
                 {
-                    // 删除repo
-                    DelRepo dr = new DelRepo();
-                    dr.RepoName = dirName;
-                    // 加密发送消息
-                    JsonPostModel jpm = new JsonPostModel();
-                    jpm.Agent = JsonPostModelAgent.Client.ToString();
-                    jpm.DataType = JsonPostModelDataType.DelRepo.ToString();
-                    jpm.Data = dr;
-                    is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), ProgramSetting.SecretKey), ProgramSetting.APIurl);
-                    if (is_Success)
+                    bool is_Success = false;
+                    int reTryCount = 3;
+                    if (is_Success == false && reTryCount > 0)
                     {
-                        is_Success = true;
+                        // 删除repo
+                        DelRepo dr = new DelRepo();
+                        dr.RepoName = dirName;
+                        // 加密发送消息
+                        JsonPostModel jpm = new JsonPostModel();
+                        jpm.Agent = JsonPostModelAgent.Client.ToString();
+                        jpm.DataType = JsonPostModelDataType.DelRepo.ToString();
+                        jpm.Data = dr;
+                        is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), item.SecretKey, item.IV), item.APIurl, item.SecretKey, item.IV);
+                        if (is_Success)
+                        {
+                            is_Success = true;
+                        }
+                        else
+                        {
+                            LogHelper.WriteLog("发送删除Repo信息出现错误", LogHelper.Log4NetLevel.Error);
+                            reTryCount--;
+                            Thread.Sleep(3000);
+                        }
+
                     }
                     else
                     {
-                        LogHelper.WriteLog("发送删除Repo信息出现错误", LogHelper.Log4NetLevel.Error);
-                        reTryCount--;
-                        Thread.Sleep(3000);
+                        LogHelper.WriteLog("发送删除Repo信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
                     }
-
                 }
-                else
-                {
-                    LogHelper.WriteLog("发送删除Repo信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
-                }
-
-
 
             }
             else
@@ -174,32 +180,38 @@ namespace VisualSVN_Agent.utils
             var change = VirtualSVNHelper.SVNHelper.ReadRepositoriesFile(e.FullPath);
             VirtualSVNHelper.SVNHelper.MergeRepoDictionary(RepoDataSourcePermission.RepoPermissons, change);
             LogHelper.WriteLog(e.FullPath + "\n 新的Repo已经创建", LogHelper.Log4NetLevel.Debug);
-            bool is_Success = false;
-            int reTryCount = 3;
-            if (is_Success == false && reTryCount > 0)
+
+            foreach (var item in ProgramSetting.APIConfig)
             {
-                // 加密发送消息
-                JsonPostModel jpm = new JsonPostModel();
-                jpm.Agent = JsonPostModelAgent.Client.ToString();
-                jpm.DataType = JsonPostModelDataType.NewRepo.ToString();
-                jpm.Data = change;
-                is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), ProgramSetting.SecretKey), ProgramSetting.APIurl);
-                if (is_Success)
+                bool is_Success = false;
+                int reTryCount = 3;
+                if (is_Success == false && reTryCount > 0)
                 {
-                    is_Success = true;
+                    // 加密发送消息
+                    JsonPostModel jpm = new JsonPostModel();
+                    jpm.Agent = JsonPostModelAgent.Client.ToString();
+                    jpm.DataType = JsonPostModelDataType.NewRepo.ToString();
+                    jpm.Data = change;
+                    is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), item.SecretKey, item.IV), item.APIurl, item.SecretKey, item.IV);
+                    if (is_Success)
+                    {
+                        is_Success = true;
+                    }
+                    else
+                    {
+                        LogHelper.WriteLog("发送新Repo信息出现错误", LogHelper.Log4NetLevel.Error);
+                        reTryCount--;
+                        Thread.Sleep(3000);
+                    }
+
                 }
                 else
                 {
-                    LogHelper.WriteLog("发送新Repo信息出现错误", LogHelper.Log4NetLevel.Error);
-                    reTryCount--;
-                    Thread.Sleep(3000);
+                    LogHelper.WriteLog("发送新Repo信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
                 }
 
             }
-            else
-            {
-                LogHelper.WriteLog("发送新Repo信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
-            }
+
 
         }
     }
@@ -252,33 +264,38 @@ namespace VisualSVN_Agent.utils
         {
             SVNHelper.htpasswdRead();
 
-            bool is_Success = false;
-            int reTryCount = 3;
-            if (is_Success == false && reTryCount > 0)
+            foreach (var item in ProgramSetting.APIConfig)
             {
-
-                // 加密发送消息
-                JsonPostModel jpm = new JsonPostModel();
-                jpm.Agent = JsonPostModelAgent.Client.ToString();
-                jpm.DataType = JsonPostModelDataType.AllAuthInfo.ToString();
-                jpm.Data = htpasswdUserAndPassword.UsersTable;
-                is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), ProgramSetting.SecretKey), ProgramSetting.APIurl);
-                if (is_Success)
+                bool is_Success = false;
+                int reTryCount = 3;
+                if (is_Success == false && reTryCount > 0)
                 {
-                    is_Success = true;
+
+                    // 加密发送消息
+                    JsonPostModel jpm = new JsonPostModel();
+                    jpm.Agent = JsonPostModelAgent.Client.ToString();
+                    jpm.DataType = JsonPostModelDataType.AllAuthInfo.ToString();
+                    jpm.Data = htpasswdUserAndPassword.UsersTable;
+                    is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), item.SecretKey, item.IV), item.APIurl,item.SecretKey, item.IV);
+                    if (is_Success)
+                    {
+                        is_Success = true;
+                    }
+                    else
+                    {
+                        LogHelper.WriteLog("发送Repo更新信息出现错误", LogHelper.Log4NetLevel.Error);
+                        reTryCount--;
+                        Thread.Sleep(3000);
+                    }
+
                 }
                 else
                 {
-                    LogHelper.WriteLog("发送Repo更新信息出现错误", LogHelper.Log4NetLevel.Error);
-                    reTryCount--;
-                    Thread.Sleep(3000);
+                    LogHelper.WriteLog("发送Repo更新信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
                 }
+            }
 
-            }
-            else
-            {
-                LogHelper.WriteLog("发送Repo更新信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
-            }
+            
         }
     }
     
@@ -333,33 +350,38 @@ namespace VisualSVN_Agent.utils
             // 刷新用户表
             SVNHelper.htpasswdRead();
 
-            bool is_Success = false;
-            int reTryCount = 3;
-            if (is_Success == false && reTryCount > 0)
+            foreach (var item in ProgramSetting.APIConfig)
             {
-
-                // 加密发送消息
-                JsonPostModel jpm = new JsonPostModel();
-                jpm.Agent = JsonPostModelAgent.Client.ToString();
-                jpm.DataType = JsonPostModelDataType.AllAuthInfo.ToString();
-                jpm.Data = htpasswdUserAndPassword.UsersTable;
-                is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), ProgramSetting.SecretKey), ProgramSetting.APIurl);
-                if (is_Success)
+                bool is_Success = false;
+                int reTryCount = 3;
+                if (is_Success == false && reTryCount > 0)
                 {
-                    is_Success = true;
+
+                    // 加密发送消息
+                    JsonPostModel jpm = new JsonPostModel();
+                    jpm.Agent = JsonPostModelAgent.Client.ToString();
+                    jpm.DataType = JsonPostModelDataType.AllAuthInfo.ToString();
+                    jpm.Data = htpasswdUserAndPassword.UsersTable;
+                    is_Success = WebFunctionHelper.PostToAPI(EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), item.SecretKey, item.IV), item.APIurl,item.SecretKey, item.IV);
+                    if (is_Success)
+                    {
+                        is_Success = true;
+                    }
+                    else
+                    {
+                        LogHelper.WriteLog("发送Repo更新信息出现错误", LogHelper.Log4NetLevel.Error);
+                        reTryCount--;
+                        Thread.Sleep(3000);
+                    }
+
                 }
                 else
                 {
-                    LogHelper.WriteLog("发送Repo更新信息出现错误", LogHelper.Log4NetLevel.Error);
-                    reTryCount--;
-                    Thread.Sleep(3000);
+                    LogHelper.WriteLog("发送Repo更新信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
                 }
+            }
 
-            }
-            else
-            {
-                LogHelper.WriteLog("发送Repo更新信息重试3次之后依旧出错！", LogHelper.Log4NetLevel.Error);
-            }
+            
         }
     }
 }

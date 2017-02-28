@@ -33,10 +33,7 @@ namespace VisualSVN_Agent
                 string response=File.ReadAllText(ProgramSetting.ConfigFilePath);
                 var responseJson=JsonConvert.DeserializeObject<RootObject>(response);
                 ProgramSetting.Repositoriespath = responseJson.Repositories.path;
-                ProgramSetting.APIurl = responseJson.APIConfig.APIurl;
-                ProgramSetting.CMDurl = responseJson.APIConfig.CMDurl;
-                ProgramSetting.IV = responseJson.APIConfig.IV;
-                ProgramSetting.SecretKey = responseJson.APIConfig.SecretKey;
+                ProgramSetting.APIConfig = responseJson.APIConfig;
                 ProgramSetting.svnAccount = responseJson.SVNAccount.UserName;
                 ProgramSetting.svnPassword = responseJson.SVNAccount.Password;
                 ProgramSetting.mID = responseJson.ID;

@@ -22,7 +22,7 @@ namespace VisualSVN_Agent.utils
         /// <param name="jsonTxt">传入 Json 文本</param>
         /// <param name="url">API 地址</param>
         /// <returns>返回是否成功</returns>
-        public static bool PostToAPI(string jsonTxt, string url)
+        public static bool PostToAPI(string jsonTxt, string url, string SecretKey,string IV)
         {
             bool is_success = false;
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -43,10 +43,10 @@ namespace VisualSVN_Agent.utils
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
-                    var resp = EncryptsAndDecryptsHelper.Decrypt(result, ProgramSetting.SecretKey);
+                    var resp = EncryptsAndDecryptsHelper.Decrypt(result,SecretKey,IV);
                     try
                     {
-                        var reader = JsonConvert.DeserializeObject<Model.JsonResponse>(resp);
+                        var reader = JsonConvert.DeserializeObject<JsonResponse>(resp);
                         if (reader!=null)
                         {
                             is_success = Convert.ToBoolean(reader.status);
@@ -82,7 +82,7 @@ namespace VisualSVN_Agent.utils
         /// <param name="jsonTxt">传入 Json 文本</param>
         /// <param name="url">API 地址</param>
         /// <returns>返回值</returns>
-        public static List<RemoteCommand> GetCmd(string jsonTxt, string url)
+        public static List<RemoteCommand> GetCmd(string jsonTxt, string url, string SecretKey,string IV)
         {
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ContentType = "application/json";
@@ -102,7 +102,7 @@ namespace VisualSVN_Agent.utils
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
-                    var resp = EncryptsAndDecryptsHelper.Decrypt(result, ProgramSetting.SecretKey);
+                    var resp = EncryptsAndDecryptsHelper.Decrypt(result, SecretKey,IV);
 
                     if (resp!= "{'CommandType':'NoCommand'}")
                     {

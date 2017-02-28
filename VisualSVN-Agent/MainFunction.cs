@@ -23,48 +23,53 @@ namespace VisualSVN_Agent
 
                 LogHelper.WriteLog("初始化仓库出现错误\n"+ex, LogHelper.Log4NetLevel.Error);
             }
-            
-            JsonPostModel jpm = new JsonPostModel();
-            jpm.Agent = JsonPostModelAgent.Client.ToString();
-            jpm.DataType = JsonPostModelDataType.AllUserTable.ToString();
-            jpm.Data = RepoDataSourcePermission.RepoPermissons;
-            encryptsJson = EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), ProgramSetting.SecretKey);
-            if (!WebFunctionHelper.PostToAPI(encryptsJson, ProgramSetting.APIurl))
+
+            foreach (var item in ProgramSetting.APIConfig)
             {
-                LogHelper.WriteLog("初始化时发送所有仓库信息出现错误", LogHelper.Log4NetLevel.Error);
+                JsonPostModel jpm = new JsonPostModel();
+                jpm.Agent = JsonPostModelAgent.Client.ToString();
+                jpm.DataType = JsonPostModelDataType.AllUserTable.ToString();
+                jpm.Data = RepoDataSourcePermission.RepoPermissons;
+                encryptsJson = EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), item.SecretKey,item.IV);
+                if (!WebFunctionHelper.PostToAPI(encryptsJson, item.APIurl, item.SecretKey, item.IV))
+                {
+                    LogHelper.WriteLog("初始化时发送所有仓库信息出现错误", LogHelper.Log4NetLevel.Error);
+                }
+
+                // 初始化 读取用户组信息
+                try
+                {
+                    groupList.userGroup = SVNHelper.GetAllUserAndGroup();
+                    LogHelper.WriteLog("用户与用户组信息初始化完成", LogHelper.Log4NetLevel.Info);
+                }
+                catch (Exception ex)
+                {
+
+                    LogHelper.WriteLog("初始化用户信息出现错误\n" + ex, LogHelper.Log4NetLevel.Error);
+                }
+
+                // 初始化 读取所有用户的密码表
+                try
+                {
+                    SVNHelper.htpasswdRead();
+                    LogHelper.WriteLog("用户密码表信息初始化完成", LogHelper.Log4NetLevel.Info);
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("初始化用户密码表信息出现错误\n" + ex, LogHelper.Log4NetLevel.Error);
+                }
+
+                jpm.Agent = JsonPostModelAgent.Client.ToString();
+                jpm.DataType = JsonPostModelDataType.AllAuthInfo.ToString();
+                jpm.Data = htpasswdUserAndPassword.UsersTable;
+                encryptsJson = EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), item.SecretKey, item.IV);
+                if (!WebFunctionHelper.PostToAPI(encryptsJson, item.APIurl, item.SecretKey, item.IV))
+                {
+                    LogHelper.WriteLog("初始化时发送用户密码信息出现错误", LogHelper.Log4NetLevel.Error);
+                }
+
             }
 
-            // 初始化 读取用户组信息
-            try
-            {
-                groupList.userGroup = SVNHelper.GetAllUserAndGroup();
-                LogHelper.WriteLog("用户与用户组信息初始化完成", LogHelper.Log4NetLevel.Info);
-            }
-            catch (Exception ex)
-            {
-
-                LogHelper.WriteLog("初始化用户信息出现错误\n" + ex, LogHelper.Log4NetLevel.Error);
-            }
-
-            // 初始化 读取所有用户的密码表
-            try
-            {
-                SVNHelper.htpasswdRead();
-                LogHelper.WriteLog("用户密码表信息初始化完成", LogHelper.Log4NetLevel.Info);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog("初始化用户密码表信息出现错误\n" + ex, LogHelper.Log4NetLevel.Error);
-            }
-
-            jpm.Agent = JsonPostModelAgent.Client.ToString();
-            jpm.DataType = JsonPostModelDataType.AllAuthInfo.ToString();
-            jpm.Data = htpasswdUserAndPassword.UsersTable;
-            encryptsJson = EncryptsAndDecryptsHelper.Encrypt(JsonConvert.SerializeObject(jpm), ProgramSetting.SecretKey);
-            if (!WebFunctionHelper.PostToAPI(encryptsJson, ProgramSetting.APIurl))
-            {
-                LogHelper.WriteLog("初始化时发送用户密码信息出现错误", LogHelper.Log4NetLevel.Error);
-            }
 
 
             LogHelper.WriteLog("启动文件监控", LogHelper.Log4NetLevel.Info);

@@ -10,7 +10,6 @@ namespace VisualSVN_Agent.utils
 {
     class EncryptsAndDecryptsHelper
     {
-        static byte[] IVbytes = Encoding.UTF8.GetBytes(ProgramSetting.IV);
         /// <summary>
         /// AES 加密模块
         /// </summary>
@@ -18,14 +17,14 @@ namespace VisualSVN_Agent.utils
         /// <param name="SecretKey">Key</param>
         /// <param name="AccessKey">IV</param>
         /// <returns>Base64编码的String</returns>
-        public static string Encrypt(string text,string SecretKey)
+        public static string Encrypt(string text,string SecretKey,string IV)
         {
             byte[] plaintextbytes = Encoding.UTF8.GetBytes(text);
             
             AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
             aes.BlockSize = 128;
             aes.Key = Encoding.UTF8.GetBytes(SecretKey);
-            aes.IV = IVbytes;
+            aes.IV = Encoding.UTF8.GetBytes(IV);
             aes.Padding = PaddingMode.PKCS7;
             aes.Mode = CipherMode.CBC;
             ICryptoTransform crypto = aes.CreateEncryptor(aes.Key, aes.IV);
@@ -41,13 +40,13 @@ namespace VisualSVN_Agent.utils
         /// <param name="SecretKey">Key</param>
         /// <param name="AccessKey">IV</param>
         /// <returns>UTF-8编码的String</returns>
-        public static string Decrypt(string encrypted,string SecretKey)
+        public static string Decrypt(string encrypted,string SecretKey, string IV)
         {
             byte[] encryptedbytes = Convert.FromBase64String(encrypted);
             AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
             aes.BlockSize = 128;
             aes.Key = Encoding.UTF8.GetBytes(SecretKey);
-            aes.IV = IVbytes;
+            aes.IV = Encoding.UTF8.GetBytes(IV);
             aes.Padding = PaddingMode.PKCS7;
             aes.Mode = CipherMode.CBC;
             ICryptoTransform crypto = aes.CreateDecryptor(aes.Key, aes.IV);

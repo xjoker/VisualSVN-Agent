@@ -1,19 +1,26 @@
 ﻿{
-  "Repositories": {
-    "path": "D:\\SVN",
-    "SitePrefix": "https://site.fzcyjh.com/svn/"
-  },
-  "WindowsShareUsername": "Kevinkern",
-  "APIConfig": {
-    "APIurl": "http://www.Aquarius.com/Services/SVNAccount.asmx/svn_agent",
-    "CMDurl": "http://www.Aquarius.com/Services/SVNAccount.asmx/cmd",
-    "IV": "zxcvbnmdfrasdfgh",
-    "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
-  },
-  "ID": "Center",
-  "SVNAccount": {
-    "UserName": "Kevin",
-    "Password": "JdyouSVN"
-  }
-
+    "Repositories": {
+        "path": "D:\\SVNTest",
+        "SitePrefix": "https://site.fzcyjh.com/svn/"
+    },
+    "WindowsShareUsername": "Kevinkern",
+    "APIConfig": [
+        {
+            "APIurl": "http://www.Aquarius.com/Services/SVNAccount.asmx/svn_agent",
+            "CMDurl": "http://www.Aquarius.com/Services/SVNAccount.asmx/cmd",
+            "IV": "zxcvbnmdfrasdfgh",
+            "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
+        },
+        {
+            "APIurl": "http://www.Aquarius.com/Services/SVNAccount.asmx/svn_agent",
+            "CMDurl": "http://www.Aquarius.com/Services/SVNAccount.asmx/cmd",
+            "IV": "zxcvbnmdfrasdfgh",
+            "SecretKey": "dofkrfaosrdedofkrfaosrdedofkrfao"
+        }
+    ],
+    "ID": "Center",
+    "SVNAccount": {
+        "UserName": "Kevin",
+        "Password": "JdyouSVN"
+    }
 }
